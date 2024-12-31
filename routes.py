@@ -17,7 +17,7 @@ def register_routes(app):
     def plans_route():
         return render_template("plans.html")
     
-    @app.route("/checkout", methods=["GET", "POST"])
+    @app.route("/checkout", methods=["GET"])
     def checkout():
         if request.method == "POST":
             try:
