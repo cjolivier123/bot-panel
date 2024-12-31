@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/">
+    <link rel="icon" href="https://i.imgur.com/Vw1XsUv.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Aruria - Checkout</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+      
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Inter', sans-serif;
+      }
+      
+      body {
+        background: #36393F;
+        color: #ffffff;
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .new-year-banner {
+        background: linear-gradient(135deg, rgba(145, 70, 255, 0.2), rgba(113, 50, 204, 0.2));
+        padding: 0.75rem;
+        text-align: center;
+        font-weight: 600;
+        color: #fff;
+        border-bottom: 1px solid rgba(145, 70, 255, 0.3);
+      }
+      
+      .back-button {
+        position: absolute;
+        top: 5rem;
+        left: 1rem;
+        background: rgba(145, 70, 255, 0.1);
+        color: #fff;
+        padding: 0.75rem 1.5rem;
+        border: 1px solid rgba(145, 70, 255, 0.2);
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        font-weight: 500;
+      }
+      
+      .back-button:hover {
+        background: rgba(145, 70, 255, 0.2);
+        border-color: rgba(145, 70, 255, 0.4);
+        transform: translateY(-2px);
+      }
+      
+      .checkout-container {
+        max-width: 800px;
+        margin: 8rem auto 4rem;
+        padding: 3rem;
+        background: rgba(47, 49, 54, 0.6);
+        border: 1px solid rgba(145, 70, 255, 0.2);
+        border-radius: 1rem;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      }
+      
+      .personal-info {
+        margin-bottom: 2rem;
+        padding: 2rem;
+        background: rgba(32, 34, 37, 0.8);
+        border-radius: 1rem;
+        border: 1px solid rgba(145, 70, 255, 0.2);
+      }
+      
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+      
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #E0E0E0;
+      }
+      
+      .form-group input {
+        width: 100%;
+        padding: 0.75rem;
+        background: rgba(32, 34, 37, 0.8);
+        border: 1px solid rgba(145, 70, 255, 0.2);
+        border-radius: 0.5rem;
+        color: #fff;
+      }
+      
+      .form-group.error input {
+        border-color: #ff4444;
+      }
+      
+      .error-message {
+        color: #ff4444;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        display: none;
+      }
+      
+      .form-group.error .error-message {
+        display: block;
+      }
+      
+      .order-summary {
+        background: rgba(32, 34, 37, 0.8);
+        border: 1px solid rgba(145, 70, 255, 0.2);
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-top: 2rem;
+      }
+      
+      .order-summary h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        color: #fff;
+      }
+      
+      .order-details {
+        margin-bottom: 2rem;
+      }
+      
+      .order-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        color: #E0E0E0;
+      }
+      
+      .duration-selector {
+        display: none;
+        margin-bottom: 1.5rem;
+      }
+      
+      .duration-selector.show {
+        display: block;
+      }
+      
+      .duration-selector select {
+        width: 100%;
+        padding: 0.75rem;
+        background: rgba(32, 34, 37, 0.8);
+        border: 1px solid rgba(145, 70, 255, 0.2);
+        border-radius: 0.5rem;
+        color: #fff;
+        margin-top: 0.5rem;
+      }
+      
+      .promo-code {
+        display: flex;
+        gap: 1rem;
+        margin: 2rem 0;
+      }
+      
+      .promo-input {
+        flex: 1;
+        padding: 0.75rem;
+        background: rgba(32, 34, 37, 0.8);
+        border: 1px solid rgba(145, 70, 255, 0.2);
+        border-radius: 0.5rem;
+        color: #fff;
+      }
+      
+      .apply-button {
+        padding: 0.75rem 1.5rem;
+        background: linear-gradient(135deg, #9146FF, #7132CC);
+        border: none;
+        border-radius: 0.5rem;
+        color: #fff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      
+      .apply-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(145, 70, 255, 0.4);
+      }
+      
+      .paypal-button {
+        width: 100%;
+        padding: 1rem;
+        background: #0070BA;
+        border: none;
+        border-radius: 0.5rem;
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+      }
+      
+      .paypal-button:hover {
+        background: #005EA6;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 112, 186, 0.4);
+      }
+      
+      .footer {
+        background: rgba(32, 34, 37, 0.8);
+        padding: 2rem;
+        text-align: center;
+        margin-top: auto;
+      }
+      
+      .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 1rem;
+      }
+      
+      .social-link {
+        color: #fff;
+        font-size: 1.5rem;
+        transition: all 0.3s ease;
+      }
+      
+      .social-link:hover {
+        color: #9146FF;
+        transform: translateY(-2px);
+      }
+      
+      .copyright {
+        color: #B9BBBE;
+        font-size: 0.9rem;
+        margin-top: 1rem;
+      }
+      
+      @media (max-width: 640px) {
+        .checkout-container {
+          margin: 4rem auto 2rem;
+          padding: 1.5rem;
+        }
+        
+        .promo-code {
+          flex-direction: column;
+        }
+        
+        .apply-button {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="new-year-banner">
+      <span>🎉 Happy New Year! 🎊</span>
+    </div>
+    
+    <a href="/plans" class="back-button">← Back to Plans</a>
+    
+    <div class="checkout-container">
+      <div class="personal-info">
+        <div class="form-group">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" name="fullName" required>
+          <div class="error-message">Please enter your full name</div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" required>
+          <div class="error-message">Please enter a valid email address</div>
+        </div>
+      </div>
+      
+      <div class="order-summary">
+        <h3>Order Summary</h3>
+        <div class="order-details">
+          <div class="order-row">
+            <span>Plan:</span>
+            <span>{{ plan_name }}</span>
+          </div>
+          {% if plan_name == "Premium Plan" %}
+          <div class="duration-selector show">
+            <label for="duration">Duration:</label>
+            <select id="duration" name="duration" onchange="updatePrice()">
+              <option value="1" data-price="2.99">1 Month ($2.99)</option>
+              <option value="3" data-price="7.99">3 Months ($7.99 - Save 11%)</option>
+              <option value="6" data-price="14.99">6 Months ($14.99 - Save 17%)</option>
+              <option value="12" data-price="24.99">12 Months ($24.99 - Save 30%)</option>
+            </select>
+          </div>
+          {% endif %}
+          <div class="order-row">
+            <span>Amount:</span>
+            <span>${{ "%.2f"|format(amount) }}</span>
+          </div>
+          {% if discount_amount %}
+          <div class="order-row">
+            <span>Discount:</span>
+            <span>-${{ "%.2f"|format(discount_amount) }}</span>
+          </div>
+          {% endif %}
+          <div class="order-row">
+            <span>Total:</span>
+            <span>${{ "%.2f"|format(final_amount) }}</span>
+          </div>
+        </div>
+        
+        <form action="/apply_promo/{{ purchase_id }}" method="POST" class="promo-code">
+          <input type="text" name="promo_code" class="promo-input" placeholder="Enter promo code">
+          <button type="submit" class="apply-button">Apply</button>
+        </form>
+        
+        <form action="/process_payment/{{ purchase_id }}" method="POST" onsubmit="return validateForm()">
+          <input type="hidden" id="hiddenAmount" name="amount" value="{{ amount }}">
+          <input type="hidden" id="hiddenFullName" name="full_name">
+          <input type="hidden" id="hiddenEmail" name="email">
+          <button type="submit" class="paypal-button">
+            <i class="fab fa-paypal"></i>
+            Pay with PayPal
+          </button>
+        </form>
+      </div>
+    </div>
+    
+    <footer class="footer">
+      <div class="social-links">
+        <a href="https://www.instagram.com/aruria.dev.team/" target="_blank" class="social-link">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://www.youtube.com/@aruria.dev.team.official" target="_blank" class="social-link">
+          <i class="fab fa-youtube"></i>
+        </a>
+      </div>
+      <div class="copyright">© 2024 Aruria. All rights reserved.</div>
+    </footer>
+    
+    <script>
+    function updatePrice() {
+      const duration = document.getElementById('duration');
+      if (duration) {
+        const selectedOption = duration.options[duration.selectedIndex];
+        const price = parseFloat(selectedOption.getAttribute('data-price'));
+        
+        // Find all price elements
+        const priceElements = document.querySelectorAll('.order-row');
+        
+        // Update amount and total
+        priceElements.forEach(row => {
+          const label = row.querySelector('span:first-child').textContent;
+          const valueSpan = row.querySelector('span:last-child');
+          
+          if (label === 'Amount:' || label === 'Total:') {
+            valueSpan.textContent = `$${price.toFixed(2)}`;
+          }
+        });
+        
+        // Update hidden input for the backend
+        const hiddenAmount = document.getElementById('hiddenAmount');
+        if (hiddenAmount) {
+          hiddenAmount.value = price.toFixed(2);
+        }
+      }
+    }
+    
+    function validateForm() {
+      const fullName = document.getElementById('fullName');
+      const email = document.getElementById('email');
+      const hiddenFullName = document.getElementById('hiddenFullName');
+      const hiddenEmail = document.getElementById('hiddenEmail');
+      let isValid = true;
+      
+      // Reset error states
+      fullName.parentElement.classList.remove('error');
+      email.parentElement.classList.remove('error');
+      
+      if (!fullName.value.trim()) {
+        fullName.parentElement.classList.add('error');
+        isValid = false;
+      }
+      
+      if (!email.value.trim() || !email.value.includes('@')) {
+        email.parentElement.classList.add('error');
+        isValid = false;
+      }
+      
+      if (isValid) {
+        hiddenFullName.value = fullName.value;
+        hiddenEmail.value = email.value;
+      }
+      
+      return isValid;
+    }
+    
+    // Call updatePrice on page load to ensure initial values are set
+    document.addEventListener('DOMContentLoaded', updatePrice);
+    
+    // Add change event listener to duration selector
+    const durationSelect = document.getElementById('duration');
+    if (durationSelect) {
+      durationSelect.addEventListener('change', updatePrice);
+    }
+    </script>
+  </body>
+</html>
