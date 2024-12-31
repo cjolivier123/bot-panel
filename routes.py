@@ -17,32 +17,36 @@ def register_routes(app):
     def plans_route():
         return render_template("plans.html")
     
-    @app.route("/checkout", methods=["GET", "POST"])
+    @app.route("/checkout", methods=["POST"])
     def checkout():
-        plan_name = request.form.get("plan_name")
-        amount = 2.99  # Default amount for Premium Plan
-        
-        # Set the correct amount based on the plan
-        if plan_name == "Lifetime Plan":
-            amount = 19.99
-        elif plan_name == "Source Code Plan":
-            amount = 22.99
-        
-        # For one-time payment plans, set final_amount equal to amount
-        final_amount = amount
-        if plan_name in ["Lifetime Plan", "Source Code Plan"]:
+        try:
+            plan_name = request.form.get("plan_name")
+            amount = 2.99  # Default amount for Premium Plan
+            
+            # Set the correct amount based on the plan
+            if plan_name == "Lifetime Plan":
+                amount = 19.99
+            elif plan_name == "Source Code Plan":
+                amount = 22.99
+            
+            # For one-time payment plans, set final_amount equal to amount
             final_amount = amount
-        
-        purchase = Purchase(
-            plan_name=plan_name,
-            amount=amount,
-            final_amount=amount,
-            full_name="",
-            email=""
-        )
-        db.session.add(purchase)
-        db.session.commit()
-        return redirect(url_for("checkout_route", purchase_id=purchase.id))
+            if plan_name in ["Lifetime Plan", "Source Code Plan"]:
+                final_amount = amount
+            
+            purchase = Purchase(
+                plan_name=plan_name,
+                amount=amount,
+                final_amount=amount,
+                full_name="",
+                email=""
+            )
+            db.session.add(purchase)
+            db.session.commit()
+            return redirect(url_for("checkout_route", purchase_id=purchase.id))
+        except Exception as e:
+            logger.error(f"Error in checkout: {str(e)}")
+            return redirect(url_for("plans_route"))
     
     @app.route("/checkout/<purchase_id>", methods=["GET"])
     def checkout_route(purchase_id):
