@@ -27,8 +27,8 @@ def register_routes(app):
                               final_amount=purchase.final_amount or purchase.amount,
                               discount_amount=purchase.amount - purchase.final_amount if purchase.final_amount else None)
     
-    @app.route("/create_checkout", methods=["POST"])
-    def create_checkout():
+    @app.route("/checkout", methods=["POST"])
+    def checkout():
         plan_name = request.form.get("plan_name")
         amount = 2.99  # Default amount for Premium Plan
         
