@@ -17,7 +17,7 @@ def register_routes(app):
     def plans_route():
         return render_template("plans.html")
     
-    @app.route("/checkout", methods=["POST"])
+    @app.route("/checkout", methods=["GET", "POST"])
     def checkout():
         plan_name = request.form.get("plan_name")
         amount = 2.99  # Default amount for Premium Plan
