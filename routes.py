@@ -17,83 +17,92 @@ def register_routes(app):
     def plans_route():
         return render_template("plans.html")
     
-    @app.route("/checkout/<purchase_id>", methods=["GET"])
-    def checkout_route(purchase_id):
-        try:
-            purchase = Purchase.query.get_or_404(purchase_id)
-            return render_template("checkout.html",
-                                  purchase_id=purchase_id,
-                                  plan_name=purchase.plan_name,
-                                  amount=purchase.amount,
-                                  final_amount=purchase.final_amount or purchase.amount,
-                                  discount_amount=purchase.amount - purchase.final_amount if purchase.final_amount else None)
-        except Exception as e:
-            logger.error(f"Error in checkout_route: {str(e)}")
-            return "An error occurred during checkout. Please try again.", 500
-    
-    @app.route("/checkout", methods=["POST"])
+    @app.route("/checkout", methods=["GET", "POST"])
     def checkout():
+        if request.method == "POST":
+            try:
+                plan_name = request.form.get("plan_name")
+                if not plan_name:
+                    logger.error("No plan_name provided in form data")
+                    return "Invalid plan selected", 400
+                
+                amount = 2.99  # Default amount for Premium Plan
+                
+                # Set the correct amount based on the plan
+                if plan_name == "Lifetime Plan":
+                    amount = 19.99
+                elif plan_name == "Source Code Plan":
+                    amount = 22.99
+                
+                # For one-time payment plans, set final_amount equal to amount
+                final_amount = amount
+                
+                return render_template("checkout.html",
+                                      plan_name=plan_name,
+                                      amount=amount,
+                                      final_amount=final_amount)
+                
+            except Exception as e:
+                logger.error(f"Error in checkout: {str(e)}")
+                return "An error occurred while processing your request. Please try again.", 500
+        else:
+            return redirect(url_for("plans_route"))
+    
+    @app.route("/apply_promo", methods=["POST"])
+    def apply_promo():
         try:
             plan_name = request.form.get("plan_name")
-            if not plan_name:
-                logger.error("No plan_name provided in form data")
-                return "Invalid plan selected", 400
+            amount = float(request.form.get("amount"))
+            promo_code = request.form.get("promo_code")
             
-            amount = 2.99  # Default amount for Premium Plan
-            
-            # Set the correct amount based on the plan
-            if plan_name == "Lifetime Plan":
-                amount = 19.99
-            elif plan_name == "Source Code Plan":
-                amount = 22.99
-            
-            # For one-time payment plans, set final_amount equal to amount
             final_amount = amount
+            if promo_code == "NEWYEAR2025":
+                final_amount = amount * 0.5
+            else:
+                final_amount = amount * 0.9
+            
+            return render_template("checkout.html",
+                                  plan_name=plan_name,
+                                  amount=amount,
+                                  final_amount=final_amount,
+                                  discount_amount=amount - final_amount,
+                                  promo_code=promo_code)
+            
+        except Exception as e:
+            logger.error(f"Error in apply_promo: {str(e)}")
+            return "An error occurred while applying the promo code. Please try again.", 500
+    
+    @app.route("/process_payment", methods=["POST"])
+    def process_payment():
+        try:
+            plan_name = request.form.get("plan_name")
+            amount = float(request.form.get("amount"))
+            final_amount = float(request.form.get("final_amount", amount))
+            full_name = request.form.get("full_name")
+            email = request.form.get("email")
+            promo_code = request.form.get("promo_code")
             
             purchase = Purchase(
                 plan_name=plan_name,
                 amount=amount,
                 final_amount=final_amount,
-                full_name="",
-                email=""
+                full_name=full_name,
+                email=email,
+                promo_code=promo_code,
+                status="completed"
             )
             
             db.session.add(purchase)
             db.session.commit()
-            logger.info(f"Created purchase record: {purchase.id} for plan: {plan_name}")
             
-            return redirect(url_for("checkout_route", purchase_id=purchase.id))
+            return redirect(url_for("thanks_route"))
             
         except Exception as e:
-            logger.error(f"Error in create_checkout: {str(e)}")
+            logger.error(f"Error in process_payment: {str(e)}")
             db.session.rollback()
-            return "An error occurred while processing your request. Please try again.", 500
+            return "An error occurred while processing your payment. Please try again.", 500
     
-    @app.route("/apply_promo/<purchase_id>", methods=["POST"])
-    def apply_promo(purchase_id):
-        purchase = Purchase.query.get_or_404(purchase_id)
-        promo_code = request.form.get("promo_code")
-        
-        # Implement promo code validation and discount calculation
-        if promo_code == "NEWYEAR2025":
-            purchase.promo_code = promo_code
-            purchase.final_amount = purchase.amount * 0.5
-        else:
-            purchase.final_amount = purchase.amount * 0.9
-        db.session.commit()
-        return redirect(url_for("checkout_route", purchase_id=purchase_id))
-    
-    @app.route("/process_payment/<purchase_id>", methods=["POST"])
-    def process_payment(purchase_id):
-        purchase = Purchase.query.get_or_404(purchase_id)
-        
-        # TODO: Implement PayPal payment processing
-        # For now, we'll just mark the purchase as completed
-        purchase.status = "completed"
-        db.session.commit()
-        
-        return redirect(url_for("thanks_route"))
-    
+
     @app.route("/thanks")
     def thanks_route():
         return render_template("thanks.html")
