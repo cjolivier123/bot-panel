@@ -307,13 +307,18 @@
           </div>
         </div>
         
-        <form action="/apply_promo/{{ purchase_id }}" method="POST" class="promo-code">
+        <form action="/apply_promo" method="POST" class="promo-code">
+          <input type="hidden" name="plan_name" value="{{ plan_name }}">
+          <input type="hidden" name="amount" value="{{ amount }}">
           <input type="text" name="promo_code" class="promo-input" placeholder="Enter promo code">
           <button type="submit" class="apply-button">Apply</button>
         </form>
         
-        <form action="/process_payment/{{ purchase_id }}" method="POST" onsubmit="return validateForm()">
+        <form action="/process_payment" method="POST" onsubmit="return validateForm()">
+          <input type="hidden" name="plan_name" value="{{ plan_name }}">
           <input type="hidden" id="hiddenAmount" name="amount" value="{{ amount }}">
+          <input type="hidden" name="final_amount" value="{{ final_amount }}">
+          <input type="hidden" name="promo_code" value="{{ promo_code }}">
           <input type="hidden" id="hiddenFullName" name="full_name">
           <input type="hidden" id="hiddenEmail" name="email">
           <button type="submit" class="paypal-button">
