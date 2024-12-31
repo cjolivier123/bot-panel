@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/">
+    <link rel="icon" href="https://i.imgur.com/Vw1XsUv.png" type="image/x-icon">
+    <title>Aruria</title>
+    <style>
+      @import url("https://cdn.jsdelivr.net/npm/tailwindcss@3.4.3/base.min.css");
+      /* Banner styles removed */
+      @import url("https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css");
+      
+      /* Custom styles */
+      :root {
+        --bg-color: #36393F;
+        --text-color: #ffffff;
+        --header-bg: #2f3136;
+        --nav-link-bg: #40444b;
+        --nav-link-hover: #4f545c;
+        --primary-color: #5865F2;
+        --primary-hover: #4752C4;
+        --gradient-start: #5865F2;
+        --gradient-end: #4752C4;
+      }
+      
+      body {
+        background: #36393F;
+        color: var(--text-color);
+        overflow-x: hidden;
+        width: 100%;
+        position: relative;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+      
+      #particles-js {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+      }
+      
+      /* Remove the dot pattern overlay */
+      
+      @keyframes gradientWave {
+        0% {
+          background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+        }
+        50% {
+          background-position: 100% 100%, -100% 100%, 200% -100%, 100% 200%, 100% 100%;
+        }
+        100% {
+          background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+        }
+      }
+      
+      /* Add noise texture overlay */
+      body::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url("data:image/png;base64,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");
+        opacity: 0.05;
+        pointer-events: none;
+        z-index: 1;
+      }
+      }
+      
+      .main-content {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 1rem;
+        min-height: calc(100vh - 4rem);
+      }
+      
+      /* Hero Section Styles */
+      .hero-section {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 4rem 2rem;
+        background: radial-gradient(circle at center, rgba(88, 101, 242, 0.15) 0%, rgba(54, 57, 63, 0) 70%);
+        position: relative;
+        animation: fadeIn 1s ease-in;
+        overflow: hidden;
+        margin-bottom: 6rem;
+      }
+      
+      .hero-section::before {
+        content: '';
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='50' cy='50' r='1' fill='rgba(145, 70, 255, 0.15)'/%3E%3C/svg%3E");
+        animation: rotate 50s linear infinite;
+        opacity: 0.5;
+      }
+      
+      .hero-content {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+      
+      .bot-logo img {
+        width: 250px;
+        height: 250px;
+        border-radius: 50%;
+        margin-bottom: 3rem;
+        box-shadow: 0 0 30px rgba(88, 101, 242, 0.3);
+      }
+      
+      .hero-title {
+        font-size: clamp(2.5rem, 8vw, 4.5rem);
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(to right, #ffffff, #e2e8f0);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      
+      .hero-description {
+        font-size: clamp(1.1rem, 4vw, 1.5rem);
+        color: #e2e8f0;
+        margin-bottom: 3rem;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      
+      /* Features Section Styles */
+      .features-section, .premium-section {
+        padding: 6rem 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .section-title {
+        font-size: 3rem;
+        font-weight: bold;
+        margin-bottom: 4rem;
+        background: linear-gradient(to right, #5865F2, #4752C4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        position: relative;
+        z-index: 2;
+      }
+      
+      .features-grid, .premium-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+      }
+      
+      .feature-card, .premium-card {
+        background: rgba(47, 49, 54, 0.6);
+        border: 1px solid rgba(88, 101, 242, 0.2);
+        border-radius: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 3rem 2rem;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+        min-height: 300px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .feature-card::before, .premium-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(45deg, transparent, rgba(88, 101, 242, 0.15), transparent);
+        transform: translateX(-100%);
+        transition: transform 0.6s ease;
+      }
+      
+      .feature-card:hover::before, .premium-card:hover::before {
+        transform: translateX(100%);
+      }
+      
+      .feature-card:hover, .premium-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(88, 101, 242, 0.2);
+        border-color: rgba(88, 101, 242, 0.4);
+      }
+      
+      .feature-icon, .premium-icon {
+        font-size: 3.5rem;
+        margin-bottom: 2rem;
+        background: linear-gradient(135deg, #5865F2, #4752C4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 15px rgba(88, 101, 242, 0.3));
+      }
+      
+      .feature-card h3, .premium-card h3 {
+        font-size: 1.75rem;
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+        color: #ffffff;
+        background: linear-gradient(135deg, #ffffff, #e2e8f0);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      
+      .feature-card p, .premium-card p {
+        color: #e2e8f0;
+        line-height: 1.8;
+        font-size: 1.1rem;
+      }
+      
+      /* Premium Section Specific Styles */
+      .premium-card {
+        background: linear-gradient(135deg, rgba(88, 101, 242, 0.2), rgba(71, 82, 196, 0.2));
+        border: 1px solid rgba(88, 101, 242, 0.3);
+      }
+      
+      .premium-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: linear-gradient(to right, #5865F2, #4752C4);
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        font-size: 0.875rem;
+        font-weight: bold;
+        color: #ffffff;
+      }
+      
+      /* Footer Section Styles */
+      .footer-section {
+        background: linear-gradient(135deg, rgba(88, 101, 242, 0.2), rgba(71, 82, 196, 0.2));
+        padding: 2rem;
+        margin-top: 4rem;
+        border-top: 1px solid rgba(88, 101, 242, 0.3);
+        box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+      }
+      
+      .footer-content {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .footer-social-links {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        padding: 1rem;
+      }
+      
+      @media (max-width: 1024px) {
+        .features-grid, .premium-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      
+      @media (max-width: 640px) {
+        .features-grid, .premium-grid {
+          grid-template-columns: 1fr;
+        }
+        
+        .footer-social-links {
+          flex-direction: column;
+          gap: 1rem;
+        }
+        
+        .banner-text {
+          font-size: 1.25rem;
+        }
+        
+        .new-year-banner {
+          padding: 0.75rem;
+        }
+        
+        .main-content {
+          padding: 0.5rem;
+        }
+        
+        .hero-section {
+          padding: 2rem 1rem;
+        }
+        
+        .bot-logo img {
+          width: 200px;
+          height: 200px;
+        }
+        
+        .features-section, .premium-section {
+          padding: 3rem 1rem;
+        }
+      }
+      
+      .footer-social-link {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: var(--text-color);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        background: rgba(88, 101, 242, 0.1);
+        transition: all 0.3s ease;
+        text-decoration: none;
+      }
+      
+      .footer-social-link:hover {
+        background: rgba(88, 101, 242, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(88, 101, 242, 0.2);
+      }
+      
+      .footer-social-icon {
+        width: 24px;
+        height: 24px;
+      }
+      
+      @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+      
+      .add-to-discord-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        background-color: #5865F2;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 0.5rem;
+        font-size: 1.25rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px -1px rgba(88, 101, 242, 0.4);
+        position: relative;
+        overflow: hidden;
+        text-decoration: none;
+      }
+      
+      .add-to-discord-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          to right,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: 0.5s;
+      }
+      
+      .add-to-discord-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px -1px rgba(88, 101, 242, 0.6);
+        background-color: #4752C4;
+      }
+      
+      .add-to-discord-btn:hover::before {
+        left: 100%;
+      }
+      
+      .add-to-discord-btn:active {
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="particles-js"></div>
+    <div class="main-content">
+      <nav class="flex justify-end p-4">
+        <a href="/plans" onclick="window.location.href='/plans'" class="bg-gradient-to-r from-purple-600 to-purple-800 text-white px-6 py-3 rounded-lg hover:from-purple-700 hover:to-purple-900 transition-all duration-300 shadow-lg hover:shadow-purple-500/25">View Plans</a>
+      </nav>
+      <section class="hero-section">
+        <div class="hero-content">
+          <div class="bot-logo">
+            <img src="https://i.imgur.com/Vw1XsUv.png" alt="Aruria Bot Logo" class="animate-bounce">
+          </div>
+          <h1 class="hero-title">Aruria</h1>
+          <p class="hero-description">The ultimate multi-purpose Discord bot that enhances your server experience</p>
+          <div class="button-container">
+            <a href="https://discord.com/oauth2/authorize?client_id=1323141952618893353&permissions=8&integration_type=0&scope=bot" target="_blank" rel="noopener noreferrer" class="add-to-discord-btn">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
+              </svg>
+              Add to Discord
+            </a>
+          </div>
+        </div>
+        <div class="scroll-indicator">
+          <span class="scroll-text">Scroll to explore features</span>
+          <div class="scroll-arrow"></div>
+        </div>
+      </section>
+      <section class="features-section">
+        <h2 class="section-title">Features</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🎮</div>
+            <h3>Moderation</h3>
+            <p>Keep your server safe with powerful moderation tools</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🎵</div>
+            <h3>Music</h3>
+            <p>High-quality music playback from various sources</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🎲</div>
+            <h3>Fun Commands</h3>
+            <p>Engage your community with entertaining commands</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">⚙️</div>
+            <h3>Server Management</h3>
+            <p>Automate roles, channels, and server organization tasks</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3>Level System</h3>
+            <p>Reward active members with XP and custom roles</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔔</div>
+            <h3>Welcome System</h3>
+            <p>Customize welcome messages and member greetings</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🎨</div>
+            <h3>Custom Commands</h3>
+            <p>Create and manage custom commands for your server</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Analytics</h3>
+            <p>Track server activity and member engagement</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🎭</div>
+            <h3>Role Management</h3>
+            <p>Advanced role management and automation</p>
+          </div>
+        </div>
+      </section>
+      <section class="premium-section">
+        <h2 class="section-title">Premium Features</h2>
+        <div class="premium-grid">
+          <div class="premium-card">
+            <span class="premium-badge">Premium</span>
+            <div class="premium-icon">🎵</div>
+            <h3>Advanced Music</h3>
+            <p>High-quality music with advanced controls and DJ features</p>
+          </div>
+          <div class="premium-card">
+            <span class="premium-badge">Premium</span>
+            <div class="premium-icon">⚙️</div>
+            <h3>Custom Commands</h3>
+            <p>Create unlimited custom commands for your server</p>
+          </div>
+          <div class="premium-card">
+            <span class="premium-badge">Premium</span>
+            <div class="premium-icon">📊</div>
+            <h3>Advanced Stats</h3>
+            <p>Access detailed analytics and server statistics</p>
+          </div>
+          <div class="premium-card">
+            <span class="premium-badge">Premium</span>
+            <div class="premium-icon">🎭</div>
+            <h3>Custom Roles</h3>
+            <p>Create and manage custom roles with ease</p>
+          </div>
+          <div class="premium-card">
+            <span class="premium-badge">Premium</span>
+            <div class="premium-icon">📅</div>
+            <h3>Event Manager</h3>
+            <p>Organize and manage server events efficiently</p>
+          </div>
+          <div class="premium-card">
+            <span class="premium-badge">Premium</span>
+            <div class="premium-icon">🔒</div>
+            <h3>Advanced Security</h3>
+            <p>Enhanced server protection and auto-moderation</p>
+          </div>
+          <div class="premium-card">
+            <span class="premium-badge">Premium</span>
+            <div class="premium-icon">💾</div>
+            <h3>Server Backups</h3>
+            <p>Advanced server backup and restoration features</p>
+          </div>
+          <div class="premium-card">
+            <span class="premium-badge">Premium</span>
+            <div class="premium-icon">🌍</div>
+            <h3>Multi-Language</h3>
+            <p>Support for multiple languages and translations</p>
+          </div>
+          <div class="premium-card">
+            <span class="premium-badge">Premium</span>
+            <div class="premium-icon">🎨</div>
+            <h3>Custom Welcome</h3>
+            <p>Personalized welcome images and messages</p>
+          </div>
+          <div class="premium-card">
+            <span class="premium-badge">Premium</span>
+            <div class="premium-icon">⚡</div>
+            <h3>Priority Support</h3>
+            <p>24/7 priority support and assistance</p>
+          </div>
+          <div class="premium-card">
+            <span class="premium-badge">Premium</span>
+            <div class="premium-icon">🤖</div>
+            <h3>Custom Bot Status</h3>
+            <p>Customize bot status and presence</p>
+          </div>
+          <div class="premium-card">
+            <span class="premium-badge">Premium</span>
+            <div class="premium-icon">🛡️</div>
+            <h3>Advanced Auto-Mod</h3>
+            <p>Enhanced automatic moderation features</p>
+          </div>
+        </div>
+      </section>
+      <footer class="footer-section">
+        <div class="footer-content">
+          <div class="footer-social-links">
+            <a href="https://www.instagram.com/aruria.rf.gd/" target="_blank" rel="noopener noreferrer" class="footer-social-link">
+              <svg class="footer-social-icon" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+              Follow us on Instagram
+            </a>
+            <a href="https://www.youtube.com/channel/UCDtIWPf1Br4eLhx4xa_2cvQ" target="_blank" rel="noopener noreferrer" class="footer-social-link">
+              <svg class="footer-social-icon" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+              Follow us on YouTube
+            </a>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+      particlesJS('particles-js', {
+        "particles": {
+          "number": {
+            "value": 80,
+            "density": {
+              "enable": true,
+              "value_area": 800
+            }
+          },
+          "color": {
+            "value": "#5865F2"
+          },
+          "shape": {
+            "type": "circle"
+          },
+          "opacity": {
+            "value": 0.5,
+            "random": false,
+            "anim": {
+              "enable": false
+            }
+          },
+          "size": {
+            "value": 3,
+            "random": true,
+            "anim": {
+              "enable": false
+            }
+          },
+          "line_linked": {
+            "enable": true,
+            "distance": 150,
+            "color": "#5865F2",
+            "opacity": 0.4,
+            "width": 1
+          },
+          "move": {
+            "enable": true,
+            "speed": 2,
+            "direction": "none",
+            "random": false,
+            "straight": false,
+            "out_mode": "out",
+            "bounce": false,
+            "attract": {
+              "enable": false
+            }
+          }
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": {
+            "onhover": {
+              "enable": true,
+              "mode": "repulse"
+            },
+            "onclick": {
+              "enable": true,
+              "mode": "push"
+            },
+            "resize": true
+          },
+          "modes": {
+            "repulse": {
+              "distance": 100,
+              "duration": 0.4
+            },
+            "push": {
+              "particles_nb": 4
+            }
+          }
+        },
+        "retina_detect": true
+      });
+    </script>
+  </body>
+</html>
