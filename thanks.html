@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/">
+    <link rel="icon" href="https://i.imgur.com/Vw1XsUv.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Aruria - Thank You</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+      
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Inter', sans-serif;
+      }
+      
+      body {
+        background: #36393F;
+        color: #ffffff;
+        line-height: 1.6;
+      }
+      
+      .new-year-banner {
+        background: linear-gradient(135deg, rgba(145, 70, 255, 0.2), rgba(113, 50, 204, 0.2));
+        padding: 0.75rem;
+        text-align: center;
+        font-weight: 600;
+        color: #fff;
+        border-bottom: 1px solid rgba(145, 70, 255, 0.3);
+      }
+      
+      .thanks-container {
+        min-height: calc(100vh - 200px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 2rem;
+      }
+      
+      .thanks-title {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, #9146FF, #7132CC);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      
+      .thanks-message {
+        font-size: 1.5rem;
+        color: #E0E0E0;
+        margin-bottom: 2rem;
+        max-width: 600px;
+      }
+      
+      .home-button {
+        background: linear-gradient(135deg, #9146FF, #7132CC);
+        color: #fff;
+        padding: 1rem 2rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      
+      .home-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(145, 70, 255, 0.4);
+      }
+      
+      .footer {
+        background: rgba(32, 34, 37, 0.8);
+        padding: 2rem;
+        text-align: center;
+      }
+      
+      .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 1rem;
+      }
+      
+      .social-link {
+        color: #fff;
+        font-size: 1.5rem;
+        transition: all 0.3s ease;
+      }
+      
+      .social-link:hover {
+        color: #9146FF;
+        transform: translateY(-2px);
+      }
+      
+      .copyright {
+        color: #B9BBBE;
+        font-size: 0.9rem;
+        margin-top: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="new-year-banner">
+      <span>🎉 Happy New Year! 🎊</span>
+    </div>
+    
+    <div class="thanks-container">
+      <h1 class="thanks-title">Thank You!</h1>
+      <p class="thanks-message">Your payment has been processed successfully. Welcome to Aruria Premium!</p>
+      <a href="/" class="home-button">Back to Home</a>
+    </div>
+    
+    <footer class="footer">
+      <div class="social-links">
+        <a href="https://www.instagram.com/aruria.dev.team/" target="_blank" class="social-link">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://www.youtube.com/@aruria.dev.team.official" target="_blank" class="social-link">
+          <i class="fab fa-youtube"></i>
+        </a>
+      </div>
+      <div class="copyright">© 2024 Aruria. All rights reserved.</div>
+    </footer>
+  </body>
+</html>
