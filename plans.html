@@ -225,7 +225,7 @@
           </ul>
         </div>
         <div class="pricing-card premium">
-          <h3>Premium Plan - $2.99</h3>
+          <h3>Premium Plan - $2.99/month</h3>
           <ul>
             <li>Advanced Music</li>
             <li>Custom Commands</li>
@@ -240,7 +240,34 @@
             <li>Custom Bot Status</li>
             <li>Advanced Auto-Mod</li>
           </ul>
-          <button class="subscribe-btn">Subscribe</button>
+          <form action="/create_checkout" method="POST">
+            <input type="hidden" name="plan_name" value="Premium Plan">
+            <button type="submit" class="subscribe-btn">Subscribe</button>
+          </form>
+        </div>
+        <div class="pricing-card premium">
+          <h3>Lifetime Plan - $19.99</h3>
+          <ul>
+            <li>All Premium Features</li>
+            <li>One-time Payment</li>
+            <li>Unlimited Access</li>
+          </ul>
+          <form action="/create_checkout" method="POST">
+            <input type="hidden" name="plan_name" value="Lifetime Plan">
+            <button type="submit" class="subscribe-btn">Buy Now</button>
+          </form>
+        </div>
+        <div class="pricing-card premium">
+          <h3>Source Code Plan - $22.99</h3>
+          <ul>
+            <li>Website Source Code</li>
+            <li>Bot Source Code</li>
+            <li>Full Access</li>
+          </ul>
+          <form action="/create_checkout" method="POST">
+            <input type="hidden" name="plan_name" value="Source Code Plan">
+            <button type="submit" class="subscribe-btn">Buy Now</button>
+          </form>
         </div>
       </div>
     </section>
