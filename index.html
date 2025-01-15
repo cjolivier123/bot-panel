@@ -3,49 +3,447 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aruria - Your Discord Bot</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Aruria - Discord Bot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 2rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px rgba(99, 102, 241, 0.5); }
+            to { text-shadow: 0 0 20px rgba(139, 92, 246, 0.8); }
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #94a3b8;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #6366f1, #8b5cf6);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .section-title {
+            text-align: center;
+            margin: 4rem 0 2rem;
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(45deg, #6366f1, #8b5cf6);
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 2rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 2rem;
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(180deg, 
+                rgba(99, 102, 241, 0.05) 0%, 
+                rgba(139, 92, 246, 0.05) 100%);
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-card:hover::before {
+            transform: translateY(0);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 1.5rem;
+            position: relative;
+        }
+
+        .feature-list li {
+            margin-bottom: 0.8rem;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            transition: transform 0.2s ease;
+            padding: 0.5rem 0;
+        }
+
+        .feature-list li::before {
+            content: '→';
+            margin-right: 0.5rem;
+            color: #6366f1;
+            font-weight: bold;
+        }
+
+        .feature-list li:hover {
+            transform: translateX(5px);
+            color: #fff;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .premium-banner {
+            margin: 6rem 2rem;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .premium-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+            z-index: 0;
+        }
+
+        .premium-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .premium-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .premium-features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .premium-feature {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            color: #94a3b8;
+        }
+
+        .premium-feature:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+            color: #fff;
+        }
+
+        .premium-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #6366f1, #8b5cf6);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .premium-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            margin-top: 4rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero {
+                min-height: 70vh;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .premium-features {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .premium-banner {
+                margin: 4rem 1rem;
+                padding: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <div class="container">
+    <div class="container">
+        <header>
             <h1>Aruria</h1>
-            <nav>
-                <ul>
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#commands">Commands</a></li>
-                    <li><a href="#support">Support</a></li>
-                </ul>
+            <nav class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#commands">Commands</a>
+                <a href="#support">Support</a>
             </nav>
-        </div>
-    </header>
+        </header>
+        
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Meet Aruria</h1>
+                <p>Your all-in-one Discord bot for moderation, fun, and community engagement</p>
+                <a href="https://discord.com/oauth2/authorize?client_id=1329133886747312159&permissions=8&integration_type=0&scope=bot" class="cta-button" target="_blank">Add to Discord</a>
+            </div>
+        </section>
 
-    <section id="hero">
-        <div class="container">
-            <h2>Your Discord Bot, Reimagined</h2>
-            <p>Aruria is a powerful and versatile Discord bot that helps you manage your server, engage your community, and enhance your overall Discord experience.</p>
-            <a href="#features" class="btn">Learn More</a>
-        </div>
-    </section>
+        <h2 class="section-title" id="features">Core Features</h2>
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3>Moderation</h3>
+                <ul class="feature-list">
+                    <li>Auto-moderation & content filtering</li>
+                    <li>Customizable warning system</li>
+                    <li>Temporary & permanent bans</li>
+                    <li>Anti-spam protection</li>
+                    <li>Raid protection</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🎵</div>
+                <h3>Music</h3>
+                <ul class="feature-list">
+                    <li>High-quality music streaming</li>
+                    <li>Playlist support</li>
+                    <li>Lyrics display</li>
+                    <li>Queue management</li>
+                    <li>Multiple platform support</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🎮</div>
+                <h3>Games & Fun</h3>
+                <ul class="feature-list">
+                    <li>Trivia games</li>
+                    <li>Economy system</li>
+                    <li>Meme generation</li>
+                    <li>Mini-games</li>
+                    <li>Level system</li>
+                </ul>
+            </div>
+        </section>
 
-    <section id="features">
-        <div class="container">
-            <h2>Powerful Features</h2>
-            <div class="features-grid">
-                <div class="feature">
-                    <img src="images/icon1.svg" alt="Feature Icon">
-                    <h3>Moderation</h3>
-                    <p>Keep your server safe and organized with Aruria's comprehensive moderation tools.</p>
-                </div>
-                <div class="feature">
-                    <img src="images/icon2.svg" alt="Feature Icon">
-                    <h3>Fun & Games</h3>
-                    <p>Engage your community with fun commands and mini-games that make your server more entertaining.</p>
-                </div>
-                <div class="feature">
-                    <img src="images/icon3.svg" alt="Feature Icon">
-                    <h3>Customizable</h3>
-                    <p>Aruria allows you to tailor the bot's features and commands to perfectly suit your needs.</p>
-                </div>
-                <div class="feature">
-                    <img src="images/icon4.svg
+        <h2 class="section-title">Advanced Features</h2>
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>Automation</h3>
+                <ul class="feature-list">
+                    <li>Custom welcome messages</li>
+                    <li>Role assignment</li>
+                    <li>Scheduled announcements</li>
+                    <li>Custom commands</li>
+                    <li>Server backups</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Statistics & Logging</h3>
+                <ul class="feature-list">
+                    <li>Server activity tracking</li>
+                    <li>Member statistics</li>
+                    <li>Moderation logs</li>
+                    <li>Voice channel analytics</li>
+                    <li>Custom event logging</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3>Utility</h3>
+                <ul class="feature-list">
+                    <li>Poll creation</li>
+                    <li>Reminder system</li>
+                    <li>Server information</li>
+                    <li>User information</li>
+                    <li>Translation service</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="premium-banner">
+            <div class="premium-content">
+                <div class="premium-icon">⭐</div>
+                <h2>Unlock Premium Features</h2>
+                <p>Join our Discord server to access exclusive features and early updates!</p>
+                <div class="premium-features">
+                    <div class="premium-feature">🚀 Priority Support</div>
