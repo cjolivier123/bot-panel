@@ -1,392 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <base href="/">
-    <link rel="icon" href="https://i.imgur.com/Vw1XsUv.png" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <title>Aruria</title>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-      
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Inter', sans-serif;
-      }
-      
-      body {
-        background: #36393F;
-        color: #ffffff;
-        line-height: 1.6;
-        overflow-x: hidden;
-      }
-      
-      .new-year-banner {
-        background: linear-gradient(135deg, rgba(145, 70, 255, 0.2), rgba(113, 50, 204, 0.2));
-        padding: 0.75rem;
-        text-align: center;
-        font-weight: 600;
-        color: #fff;
-        border-bottom: 1px solid rgba(145, 70, 255, 0.3);
-        animation: bannerGlow 2s ease-in-out infinite alternate;
-      }
-      
-      @keyframes bannerGlow {
-        from { box-shadow: 0 0 10px rgba(145, 70, 255, 0.3); }
-        to { box-shadow: 0 0 20px rgba(145, 70, 255, 0.5); }
-      }
-      
-      .plans-button {
-        position: absolute;
-        top: 3rem;
-        right: 1rem;
-        background: rgba(145, 70, 255, 0.1);
-        color: #fff;
-        padding: 0.75rem 1.5rem;
-        border: 1px solid rgba(145, 70, 255, 0.2);
-        border-radius: 0.5rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        font-weight: 500;
-        z-index: 1000;
-      }
-      
-      .plans-button:hover {
-        background: rgba(145, 70, 255, 0.2);
-        border-color: rgba(145, 70, 255, 0.4);
-        transform: translateY(-2px);
-      }
-      
-      .hero {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 2rem;
-        position: relative;
-      }
-      
-      .hero-content {
-        max-width: 800px;
-        position: relative;
-        z-index: 1;
-      }
-      
-      .hero-logo {
-        width: 150px;
-        height: 150px;
-        margin-bottom: 2rem;
-        border-radius: 50%;
-      }
-      
-      .hero-title {
-        font-size: 4.5rem;
-        font-weight: 700;
-        margin-bottom: 1.5rem;
-        background: linear-gradient(135deg, #9146FF, #7132CC);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: titleGlow 2s ease-in-out infinite alternate;
-      }
-      
-      @keyframes titleGlow {
-        from { text-shadow: 0 0 20px rgba(145, 70, 255, 0.5); }
-        to { text-shadow: 0 0 40px rgba(145, 70, 255, 0.8); }
-      }
-      
-      .hero-subtitle {
-        font-size: 1.8rem;
-        color: #E0E0E0;
-        margin-bottom: 3rem;
-        opacity: 0;
-        animation: fadeInUp 1s ease forwards 0.5s;
-      }
-      
-      .invite-button {
-        background: linear-gradient(135deg, #9146FF, #7132CC);
-        color: #fff;
-        padding: 1rem 2rem;
-        border-radius: 0.5rem;
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        display: inline-block;
-        margin-top: 2rem;
-      }
-      
-      .invite-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(145, 70, 255, 0.4);
-      }
-      
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      
-      .features {
-        padding: 6rem 2rem;
-        background: rgba(32, 34, 37, 0.8);
-        position: relative;
-      }
-      
-      .section-title {
-        font-size: 3rem;
-        font-weight: 700;
-        margin-bottom: 4rem;
-        text-align: center;
-        background: linear-gradient(135deg, #9146FF, #7132CC);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-      
-      .features-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 2rem;
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-      
-      .feature-card {
-        background: rgba(47, 49, 54, 0.6);
-        border: 1px solid rgba(145, 70, 255, 0.2);
-        border-radius: 1rem;
-        padding: 2rem;
-        transition: all 0.3s ease;
-        text-align: center;
-      }
-      
-      .feature-card:hover {
-        transform: translateY(-10px);
-        border-color: #9146FF;
-        box-shadow: 0 10px 30px rgba(145, 70, 255, 0.2);
-      }
-      
-      .feature-icon {
-        font-size: 3rem;
-        margin-bottom: 1.5rem;
-        background: linear-gradient(135deg, #9146FF, #7132CC);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: iconPulse 2s infinite;
-      }
-      
-      @keyframes iconPulse {
-        0% { text-shadow: 0 0 10px rgba(145, 70, 255, 0.5); }
-        50% { text-shadow: 0 0 20px rgba(145, 70, 255, 0.8); }
-        100% { text-shadow: 0 0 10px rgba(145, 70, 255, 0.5); }
-      }
-      
-      .feature-card h3 {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-        color: #FFFFFF;
-      }
-      
-      .feature-card p {
-        color: #B9BBBE;
-        font-size: 1rem;
-      }
-      
-      .premium-features {
-        padding: 6rem 2rem;
-        background: rgba(32, 34, 37, 0.9);
-        position: relative;
-      }
-      
-      .premium-badge {
-        position: absolute;
-        top: 2rem;
-        right: 2rem;
-        background: linear-gradient(135deg, #9146FF, #7132CC);
-        padding: 0.5rem 1.5rem;
-        border-radius: 2rem;
-        font-weight: 600;
-        animation: badgePulse 2s infinite;
-      }
-      
-      @keyframes badgePulse {
-        0% { box-shadow: 0 0 0 0 rgba(145, 70, 255, 0.4); }
-        70% { box-shadow: 0 0 0 15px rgba(145, 70, 255, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(145, 70, 255, 0); }
-      }
-      
-      .feature-card.premium {
-        background: rgba(47, 49, 54, 0.8);
-        border: 2px solid transparent;
-        background-clip: padding-box;
-        position: relative;
-      }
-      
-      .feature-card.premium::before {
-        content: '';
-        position: absolute;
-        top: -2px;
-        right: -2px;
-        bottom: -2px;
-        left: -2px;
-        background: linear-gradient(135deg, #9146FF, #7132CC);
-        border-radius: 1rem;
-        z-index: -1;
-      }
-      
-      .footer {
-        background: rgba(32, 34, 37, 0.8);
-        padding: 2rem;
-        text-align: center;
-        margin-top: 4rem;
-      }
-      
-      .social-links {
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-        margin-bottom: 1rem;
-      }
-      
-      .social-link {
-        color: #fff;
-        font-size: 1.5rem;
-        transition: all 0.3s ease;
-      }
-      
-      .social-link:hover {
-        color: #9146FF;
-        transform: translateY(-2px);
-      }
-      
-      .copyright {
-        color: #B9BBBE;
-        font-size: 0.9rem;
-        margin-top: 1rem;
-      }
-      
-      @media (max-width: 1024px) {
-        .features-grid {
-          grid-template-columns: repeat(2, 1fr);
-        }
-      }
-      
-      @media (max-width: 640px) {
-        .hero-title {
-          font-size: 3rem;
-        }
-        
-        .hero-subtitle {
-          font-size: 1.2rem;
-        }
-        
-        .features-grid {
-          grid-template-columns: 1fr;
-        }
-        
-        .section-title {
-          font-size: 2rem;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="new-year-banner">
-      <span>🎉 Happy New Year! 🎊</span>
-    </div>
-    <a href="/plans" class="plans-button" style="top: 5rem;">Plans</a>
-    
-    <section class="hero">
-      <div class="hero-content">
-        <img src="https://i.imgur.com/Vw1XsUv.png" alt="Aruria Logo" class="hero-logo">
-        <h1 class="hero-title">Welcome to Aruria</h1>
-        <p class="hero-subtitle">The next generation Discord bot for your community</p>
-        <a href="#" class="invite-button">Add to Discord</a>
-      </div>
+    <title>Aruria - Your Discord Bot</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Aruria</h1>
+            <nav>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#commands">Commands</a></li>
+                    <li><a href="#support">Support</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="hero">
+        <div class="container">
+            <h2>Your Discord Bot, Reimagined</h2>
+            <p>Aruria is a powerful and versatile Discord bot that helps you manage your server, engage your community, and enhance your overall Discord experience.</p>
+            <a href="#features" class="btn">Learn More</a>
+        </div>
     </section>
-    
-    <section class="features" id="features">
-      <h2 class="section-title">Key Features</h2>
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">🛡️</div>
-          <h3>Advanced Moderation</h3>
-          <p>Keep your server safe with powerful moderation tools and auto-mod features.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🎵</div>
-          <h3>High Quality Music</h3>
-          <p>Play music from multiple sources with crystal clear audio quality.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">⚡</div>
-          <h3>Custom Commands</h3>
-          <p>Create your own commands to automate tasks and enhance server interaction.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📊</div>
-          <h3>Advanced Analytics</h3>
-          <p>Track server activity and member engagement with detailed statistics.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🎮</div>
-          <h3>Fun Mini-Games</h3>
-          <p>Keep your community engaged with interactive mini-games and challenges.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🌟</div>
-          <h3>Level System</h3>
-          <p>Reward active members with an advanced leveling and role system.</p>
-        </div>
-      </div>
-    </section>
-    
-    <section class="premium-features">
-      <div class="premium-badge">Premium</div>
-      <h2 class="section-title">Premium Features</h2>
-      <div class="features-grid">
-        <div class="feature-card premium">
-          <div class="feature-icon">🎼</div>
-          <h3>Advanced Music</h3>
-          <p>Enjoy high-quality music with custom playlists, effects, and DJ controls.</p>
-        </div>
-        <div class="feature-card premium">
-          <div class="feature-icon">🔒</div>
-          <h3>Advanced Security</h3>
-          <p>Enhanced protection with raid detection, verification systems, and backup tools.</p>
-        </div>
-        <div class="feature-card premium">
-          <div class="feature-icon">📈</div>
-          <h3>Advanced Stats</h3>
-          <p>Detailed analytics dashboard with member activity, engagement metrics, and reports.</p>
-        </div>
-        <div class="feature-card premium">
-          <div class="feature-icon">🎨</div>
-          <h3>Custom Welcome</h3>
-          <p>Create stunning welcome messages with custom images and dynamic content.</p>
-        </div>
-      </div>
-    </section>
-    
-    <footer class="footer">
-      <div class="social-links">
-        <a href="https://www.instagram.com/aruria.dev.team/" target="_blank" class="social-link">
-          <i class="fab fa-instagram"></i>
-        </a>
-        <a href="https://www.youtube.com/@aruria.dev.team.official" target="_blank" class="social-link">
-          <i class="fab fa-youtube"></i>
-        </a>
-      </div>
-      <div class="copyright">© 2024 Aruria. All rights reserved.</div>
-    </footer>
-  </body>
-</html>
+
+    <section id="features">
+        <div class="container">
+            <h2>Powerful Features</h2>
+            <div class="features-grid">
+                <div class="feature">
+                    <img src="images/icon1.svg" alt="Feature Icon">
+                    <h3>Moderation</h3>
+                    <p>Keep your server safe and organized with Aruria's comprehensive moderation tools.</p>
+                </div>
+                <div class="feature">
+                    <img src="images/icon2.svg" alt="Feature Icon">
+                    <h3>Fun & Games</h3>
+                    <p>Engage your community with fun commands and mini-games that make your server more entertaining.</p>
+                </div>
+                <div class="feature">
+                    <img src="images/icon3.svg" alt="Feature Icon">
+                    <h3>Customizable</h3>
+                    <p>Aruria allows you to tailor the bot's features and commands to perfectly suit your needs.</p>
+                </div>
+                <div class="feature">
+                    <img src="images/icon4.svg
