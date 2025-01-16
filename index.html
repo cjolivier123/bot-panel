@@ -51,17 +51,6 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .nav-links a {
-            color: var(--light);
-            text-decoration: none;
-            margin-left: 30px;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent);
-        }
-
         /* Header */
         header {
             text-align: center;
@@ -199,9 +188,6 @@
         }
 
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
             .bot-title {
                 font-size: 3em;
             }
@@ -212,11 +198,6 @@
     <div class="container">
         <nav>
             <div class="logo">Aruria</div>
-            <div class="nav-links">
-                <a href="#features">Features</a>
-                <a href="#premium">Premium</a>
-                <a href="#stats">Stats</a>
-            </div>
         </nav>
 
         <header>
@@ -226,7 +207,7 @@
             <a href="https://discord.gg/DmGFzJfZD7" class="btn">Join Support Server</a>
         </header>
 
-        <div class="features" id="features">
+        <div class="features">
             <div class="feature-card">
                 <i class="fas fa-shield-alt"></i>
                 <h3>Advanced Moderation</h3>
@@ -259,7 +240,7 @@
             </div>
         </div>
 
-        <div class="premium-section" id="premium">
+        <div class="premium-section">
             <h2 class="premium-title">Unlock Premium Features</h2>
             <p>Join our Discord server to access exclusive premium features!</p>
             <div class="premium-features">
@@ -279,7 +260,7 @@
             <a href="https://discord.gg/DmGFzJfZD7" class="btn">Join Discord Now</a>
         </div>
 
-        <div class="stats" id="stats">
+        <div class="stats">
             <div class="stat-item">
                 <div class="stat-number">0</div>
                 <div class="stat-label">Servers</div>
