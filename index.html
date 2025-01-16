@@ -1,100 +1,298 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Previous head content remains the same -->
-    <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai@0.1.3/dist/generative-ai.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aruria Bot | Next Gen Discord Bot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #7289DA;
+            --secondary: #5865F2;
+            --accent: #FF73FA;
+            --dark: #0A0A1B;
+            --light: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--dark), #16213e);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 50px;
+        }
+
+        .logo {
+            font-size: 2em;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            margin-left: 30px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 80px 0;
+            position: relative;
+        }
+
+        .bot-title {
+            font-size: 5em;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px rgba(114, 137, 218, 0.3);
+            }
+            to {
+                text-shadow: 0 0 20px rgba(255, 115, 250, 0.5);
+            }
+        }
+
+        .bot-description {
+            font-size: 1.4em;
+            color: #ccc;
+            margin-bottom: 40px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 15px 35px;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            margin: 10px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(114, 137, 218, 0.4);
+        }
+
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 35px;
+            border-radius: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-card i {
+            font-size: 3em;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        /* Premium Section */
+        .premium-section {
+            background: linear-gradient(45deg, rgba(114, 137, 218, 0.1), rgba(255, 115, 250, 0.1));
+            padding: 60px 30px;
+            border-radius: 30px;
+            text-align: center;
+            margin: 80px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .premium-title {
+            font-size: 2.5em;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .premium-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .premium-feature {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin: 50px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            min-width: 200px;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .bot-title {
+                font-size: 3em;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Previous HTML content remains the same -->
-    <script>
-        // Initialize Gemini AI
-        const genAI = new GoogleGenerativeAI('AIzaSyC2RUbVzEpaD-MmkmoSSl0Eh2bQlMstevM');
-        const messagesContainer = document.getElementById('messages');
-        const chatForm = document.getElementById('chat-form');
-        const userInput = document.getElementById('user-input');
+    <div class="container">
+        <nav>
+            <div class="logo">Aruria</div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#premium">Premium</a>
+                <a href="#stats">Stats</a>
+            </div>
+        </nav>
 
-        // Welcome message
-        window.onload = () => {
-            addMessage('assistant', 'Hello! I'm your AI assistant. How can I help you today?');
-        };
+        <header>
+            <h1 class="bot-title">Aruria</h1>
+            <p class="bot-description">Elevate your Discord server with next-generation features</p>
+            <a href="https://discord.com/oauth2/authorize?client_id=1329133886747312159&permissions=8&integration_type=0&scope=bot" class="btn">Add to Discord</a>
+            <a href="https://discord.gg/DmGFzJfZD7" class="btn">Join Support Server</a>
+        </header>
 
-        async function sendMessage(e) {
-            e.preventDefault();
-            const message = userInput.value.trim();
-            if (!message) return;
+        <div class="features" id="features">
+            <div class="feature-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Advanced Moderation</h3>
+                <p>Keep your server safe with powerful moderation tools</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-music"></i>
+                <h3>Premium Music</h3>
+                <p>High-quality music streaming with advanced controls</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-gamepad"></i>
+                <h3>Mini Games</h3>
+                <p>Engage your community with fun mini-games</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Server Stats</h3>
+                <p>Track your server's growth and activity</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-robot"></i>
+                <h3>Auto Moderation</h3>
+                <p>AI-powered automatic content moderation</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-star"></i>
+                <h3>Level System</h3>
+                <p>Reward active members with XP and ranks</p>
+            </div>
+        </div>
 
-            // Display user message
-            addMessage('user', message);
-            const currentInput = message;
-            userInput.value = '';
+        <div class="premium-section" id="premium">
+            <h2 class="premium-title">Unlock Premium Features</h2>
+            <p>Join our Discord server to access exclusive premium features!</p>
+            <div class="premium-features">
+                <div class="premium-feature">
+                    <i class="fas fa-crown"></i>
+                    <h3>Custom Commands</h3>
+                </div>
+                <div class="premium-feature">
+                    <i class="fas fa-bolt"></i>
+                    <h3>Priority Support</h3>
+                </div>
+                <div class="premium-feature">
+                    <i class="fas fa-gem"></i>
+                    <h3>Exclusive Features</h3>
+                </div>
+            </div>
+            <a href="https://discord.gg/DmGFzJfZD7" class="btn">Join Discord Now</a>
+        </div>
 
-            // Show typing indicator
-            const loadingMessage = showTypingIndicator();
-
-            try {
-                // Generate response using Gemini
-                const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-                const result = await model.generateContent(currentInput);
-                const response = await result.response;
-                const text = response.text();
-
-                // Remove typing indicator and display AI response
-                loadingMessage.remove();
-                addMessage('assistant', text);
-            } catch (error) {
-                console.log('Error:', error);
-                loadingMessage.remove();
-                addMessage('assistant', 'I encountered an error. Please try again.');
-            }
-        }
-
-        function addMessage(role, content) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${role}-message`;
-
-            const avatar = document.createElement('div');
-            avatar.className = `avatar ${role}-avatar`;
-            avatar.textContent = role === 'user' ? '👤' : '🤖';
-
-            const bubble = document.createElement('div');
-            bubble.className = 'message-bubble';
-            bubble.textContent = content;
-
-            messageDiv.appendChild(avatar);
-            messageDiv.appendChild(bubble);
-            messagesContainer.appendChild(messageDiv);
-            
-            // Smooth scroll to latest message
-            messageDiv.scrollIntoView({ behavior: 'smooth' });
-            return messageDiv;
-        }
-
-        function showTypingIndicator() {
-            const typingDiv = document.createElement('div');
-            typingDiv.className = 'message assistant-message';
-            
-            const avatar = document.createElement('div');
-            avatar.className = 'avatar ai-avatar';
-            avatar.textContent = '🤖';
-
-            const bubble = document.createElement('div');
-            bubble.className = 'message-bubble typing-indicator';
-            
-            for (let i = 0; i < 3; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'typing-dot';
-                bubble.appendChild(dot);
-            }
-
-            typingDiv.appendChild(avatar);
-            typingDiv.appendChild(bubble);
-            messagesContainer.appendChild(typingDiv);
-            typingDiv.scrollIntoView({ behavior: 'smooth' });
-
-            return typingDiv;
-        }
-
-        chatForm.addEventListener('submit', sendMessage);
-    </script>
+        <div class="stats" id="stats">
+            <div class="stat-item">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Servers</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Users</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">99.9%</div>
+                <div class="stat-label">Uptime</div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
