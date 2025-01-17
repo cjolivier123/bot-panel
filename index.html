@@ -259,11 +259,52 @@
         const typingIndicator = document.getElementById('typingIndicator');
 
         const API_ENDPOINTS = {
-            'chatgpt': 'https://free.churchless.tech/v1/chat/completions',
-            'gemini': 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent',
-            'llama': 'https://api.deepinfra.com/v1/inference/meta-llama/Llama-2-70b-chat-hf',
-            'mistral': 'https://api.deepinfra.com/v1/inference/mistralai/Mistral-7B-Instruct-v0.1'
-        };
+    'chatgpt': 'https://api.groq.com/openai/v1/chat/completions',
+    'gemini': 'https://api.perplexity.ai/chat/completions',
+    'llama': 'https://api.together.xyz/v1/chat/completions',
+    'mistral': 'https://api.mistral.ai/v1/chat/completions'
+};
+
+// Add these API keys right after the endpoints
+const API_KEYS = {
+    'chatgpt': 'gsk_0123456789',
+    'gemini': 'pplx-0123456789',
+    'llama': 'tok_0123456789',
+    'mistral': 'msk_0123456789'
+};
+
+// Update the generateResponse function
+async function generateResponse(input) {
+    const endpoint = API_ENDPOINTS[currentModel];
+    const apiKey = API_KEYS[currentModel];
+    
+    const payload = {
+        model: currentModel === 'chatgpt' ? 'gpt-3.5-turbo' : 'mixtral-8x7b',
+        messages: [{
+            role: "user",
+            content: input
+        }],
+        temperature: 0.7,
+        max_tokens: 2048
+    };
+
+    try {
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        return data.choices[0].message.content;
+    } catch (error) {
+        throw new Error('Connection failed');
+    }
+}
+
 
         async function generateResponse(input) {
             const endpoint = API_ENDPOINTS[currentModel];
