@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-Model AI Chat Interface</title>
+    <title>AI Chat Interface</title>
     <style>
         * {
             margin: 0;
@@ -87,13 +87,6 @@
             background: #5C5CFF;
         }
 
-        .model-icon {
-            width: 20px;
-            height: 20px;
-            background: #5C5CFF;
-            border-radius: 50%;
-        }
-
         .chat-container {
             flex: 1;
             padding: 20px;
@@ -146,7 +139,6 @@
             width: 100%;
             display: flex;
             gap: 10px;
-            position: relative;
         }
 
         textarea {
@@ -160,11 +152,6 @@
             resize: none;
             height: 50px;
             outline: none;
-            transition: border-color 0.3s;
-        }
-
-        textarea:focus {
-            border-color: #5C5CFF;
         }
 
         button {
@@ -175,13 +162,10 @@
             color: white;
             cursor: pointer;
             transition: 0.3s;
-            font-size: 16px;
-            font-weight: 500;
         }
 
         button:hover {
             background: #4949cc;
-            transform: translateY(-1px);
         }
 
         .typing-indicator {
@@ -219,23 +203,6 @@
             from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
             to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #2A2B32;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #565869;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #676980;
-        }
     </style>
 </head>
 <body>
@@ -245,25 +212,21 @@
                 Select AI Model
             </button>
             <div class="model-dropdown" id="modelDropdown">
-                <div class="model-option" onclick="selectModel('gpt3')">
+                <div class="model-option" onclick="selectModel('chatgpt')">
                     <div class="model-icon"></div>
-                    GPT-3.5
+                    ChatGPT
                 </div>
-                <div class="model-option" onclick="selectModel('palm')">
+                <div class="model-option" onclick="selectModel('gemini')">
                     <div class="model-icon"></div>
-                    PaLM
+                    Gemini
                 </div>
                 <div class="model-option" onclick="selectModel('llama')">
                     <div class="model-icon"></div>
                     Llama 2
                 </div>
-                <div class="model-option" onclick="selectModel('claude')">
+                <div class="model-option" onclick="selectModel('mistral')">
                     <div class="model-icon"></div>
-                    Claude
-                </div>
-                <div class="model-option" onclick="selectModel('falcon')">
-                    <div class="model-icon"></div>
-                    Falcon
+                    Mistral
                 </div>
             </div>
         </div>
@@ -296,76 +259,55 @@
         const typingIndicator = document.getElementById('typingIndicator');
 
         const API_ENDPOINTS = {
-            'gpt3': [
-                'https://free.churchless.tech/v1/chat/completions',
-                'https://api.free-ai.chat/v1/chat/completions',
-                'https://api.openai-proxy.com/v1/chat/completions'
-            ],
-            'palm': [
-                'https://palm-api-proxy.onrender.com/v1/chat/completions',
-                'https://palm-proxy.free-ai.dev/v1/chat/completions'
-            ],
-            'llama': [
-                'https://api.llama-api.com/chat/completions',
-                'https://llama.free-ai.dev/v1/chat/completions'
-            ],
-            'claude': [
-                'https://claude-api.free-ai.dev/v1/chat/completions',
-                'https://claude-proxy.onrender.com/v1/chat/completions'
-            ],
-            'falcon': [
-                'https://falcon-api.free-ai.dev/v1/chat/completions',
-                'https://api.deepinfra.com/v1/inference/falcon-7b-instruct'
-            ]
+            'chatgpt': 'https://free.churchless.tech/v1/chat/completions',
+            'gemini': 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent',
+            'llama': 'https://api.deepinfra.com/v1/inference/meta-llama/Llama-2-70b-chat-hf',
+            'mistral': 'https://api.deepinfra.com/v1/inference/mistralai/Mistral-7B-Instruct-v0.1'
         };
 
         async function generateResponse(input) {
-            const endpoints = API_ENDPOINTS[currentModel];
-            let lastError = null;
+            const endpoint = API_ENDPOINTS[currentModel];
+            
+            const payload = {
+                messages: [{
+                    role: "user",
+                    content: input
+                }],
+                model: "gpt-3.5-turbo",
+                temperature: 0.7,
+                max_tokens: 2048
+            };
 
-            for (const endpoint of endpoints) {
-                try {
-                    const payload = {
-                        messages: [{
-                            role: "user",
-                            content: input
-                        }],
-                        model: currentModel,
-                        temperature: 0.7,
-                        max_tokens: 150
-                    };
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
 
-                    const response = await fetch(endpoint, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-
-                    const data = await response.json();
-                    
-                    if (data.choices && data.choices[0]) {
-                        return data.choices[0].message?.content || data.choices[0].text;
-                    } else if (data.response) {
-                        return data.response;
-                    } else if (data.generated_text) {
-                        return data.generated_text;
-                    }
-                    
-                    return data.output || data.text || "I couldn't generate a proper response.";
-
-                } catch (error) {
-                    lastError = error;
-                    continue;
+                if (!response.ok) {
+                    throw new Error('API request failed');
                 }
-            }
 
-            throw lastError;
+                const data = await response.json();
+                return data.choices[0].message.content || data.choices[0].text || data.generated_text || "I apologize, but I couldn't generate a proper response.";
+            } catch (error) {
+                console.error('Error:', error);
+                throw error;
+            }
+        }
+
+        function toggleDropdown() {
+            document.getElementById('modelDropdown').classList.toggle('show');
+        }
+
+        function selectModel(model) {
+            currentModel = model;
+            document.getElementById('currentModel').textContent = model.charAt(0).toUpperCase() + model.slice(1);
+            document.getElementById('modelDropdown').classList.remove('show');
+            addMessage(`Switched to ${model.charAt(0).toUpperCase() + model.slice(1)} model`, 'bot');
         }
 
         async function sendMessage() {
@@ -387,20 +329,8 @@
                 addMessage(response, 'bot');
             } catch (error) {
                 typingIndicator.style.display = 'none';
-                addMessage('This model is currently busy. Please try another model or try again in a moment.', 'bot');
-                console.error('Error:', error);
+                addMessage('This model is temporarily unavailable. Please try another model.', 'bot');
             }
-        }
-
-        function toggleDropdown() {
-            document.getElementById('modelDropdown').classList.toggle('show');
-        }
-
-        function selectModel(model) {
-            currentModel = model;
-            document.getElementById('currentModel').textContent = model.toUpperCase();
-            document.getElementById('modelDropdown').classList.remove('show');
-            addMessage(`Now using ${model.toUpperCase()} model`, 'bot');
         }
 
         function addMessage(text, sender) {
