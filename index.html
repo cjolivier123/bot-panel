@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern AI Chat Interface</title>
+    <title>Multi-Model AI Chat Interface</title>
     <style>
         * {
             margin: 0;
@@ -18,6 +18,76 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
+        }
+
+        .header {
+            background: #444654;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #565869;
+        }
+
+        .model-selector {
+            position: relative;
+            display: inline-block;
+        }
+
+        .model-button {
+            background: #5C5CFF;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .model-button:after {
+            content: '▼';
+            font-size: 12px;
+        }
+
+        .model-dropdown {
+            display: none;
+            position: absolute;
+            background: #2A2B32;
+            min-width: 200px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            z-index: 1;
+            margin-top: 5px;
+        }
+
+        .model-dropdown.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        .model-option {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .model-option:hover {
+            background: #404149;
+        }
+
+        .model-option.active {
+            background: #5C5CFF;
+        }
+
+        .model-icon {
+            width: 20px;
+            height: 20px;
+            background: #5C5CFF;
+            border-radius: 50%;
         }
 
         .chat-container {
@@ -129,13 +199,44 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
+    <div class="header">
+        <div class="model-selector">
+            <button class="model-button" onclick="toggleDropdown()" id="currentModel">
+                Select AI Model
+            </button>
+            <div class="model-dropdown" id="modelDropdown">
+                <div class="model-option" onclick="selectModel('gpt-j')">
+                    <div class="model-icon"></div>
+                    GPT-J
+                </div>
+                <div class="model-option" onclick="selectModel('falcon')">
+                    <div class="model-icon"></div>
+                    Falcon
+                </div>
+                <div class="model-option" onclick="selectModel('bloom')">
+                    <div class="model-icon"></div>
+                    BLOOM
+                </div>
+                <div class="model-option" onclick="selectModel('flan-t5')">
+                    <div class="model-icon"></div>
+                    FLAN-T5
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="chat-container" id="chatContainer">
         <div class="message bot">
             <div class="message-bubble">
-                Hello! I'm your AI assistant. How can I help you today?
+                Hello! Please select an AI model to start chatting.
             </div>
         </div>
         <div class="typing-indicator" id="typingIndicator">
@@ -144,6 +245,7 @@
             <span></span>
         </div>
     </div>
+
     <div class="input-container">
         <div class="input-box">
             <textarea id="userInput" placeholder="Type your message here..." rows="1"></textarea>
@@ -152,11 +254,32 @@
     </div>
 
     <script>
-        // Replace with your Gemini API key
-        const API_KEY = 'AIzaSyC2RUbVzEpaD-MmkmoSSl0Eh2bQlMstevM';
+        let currentModel = null;
         const textarea = document.getElementById('userInput');
         const chatContainer = document.getElementById('chatContainer');
         const typingIndicator = document.getElementById('typingIndicator');
+
+        function toggleDropdown() {
+            document.getElementById('modelDropdown').classList.toggle('show');
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.model-button')) {
+                const dropdowns = document.getElementsByClassName('model-dropdown');
+                for (const dropdown of dropdowns) {
+                    if (dropdown.classList.contains('show')) {
+                        dropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+
+        function selectModel(model) {
+            currentModel = model;
+            document.getElementById('currentModel').textContent = model.toUpperCase();
+            document.getElementById('modelDropdown').classList.remove('show');
+            addMessage(`Switched to ${model.toUpperCase()} model`, 'bot');
+        }
 
         textarea.addEventListener('keypress', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -168,42 +291,46 @@
         async function sendMessage() {
             const userInput = textarea.value.trim();
             if (!userInput) return;
+            if (!currentModel) {
+                addMessage('Please select an AI model first!', 'bot');
+                return;
+            }
 
-            // Add user message
             addMessage(userInput, 'user');
             textarea.value = '';
-
-            // Show typing indicator
             typingIndicator.style.display = 'block';
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
             try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        contents: [{
-                            parts: [{
-                                text: userInput
-                            }]
-                        }]
-                    })
-                });
-
-                const data = await response.json();
-                const botResponse = data.candidates[0].content.parts[0].text;
-
-                // Hide typing indicator and add bot response
+                const response = await generateResponse(userInput);
                 typingIndicator.style.display = 'none';
-                addMessage(botResponse, 'bot');
-
+                addMessage(response, 'bot');
             } catch (error) {
                 typingIndicator.style.display = 'none';
-                addMessage('Sorry, I encountered an error. Please try again.', 'bot');
+                addMessage('Error generating response. Please try again.', 'bot');
                 console.error('Error:', error);
             }
+        }
+
+        async function generateResponse(input) {
+            // Using HuggingFace Inference API endpoints
+            const endpoints = {
+                'gpt-j': 'https://api-inference.huggingface.co/models/EleutherAI/gpt-j-6B',
+                'falcon': 'https://api-inference.huggingface.co/models/tiiuae/falcon-7b',
+                'bloom': 'https://api-inference.huggingface.co/models/bigscience/bloom',
+                'flan-t5': 'https://api-inference.huggingface.co/models/google/flan-t5-xxl'
+            };
+
+            const response = await fetch(endpoints[currentModel], {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ inputs: input })
+            });
+
+            const data = await response.json();
+            return Array.isArray(data) ? data[0].generated_text : data.generated_text;
         }
 
         function addMessage(text, sender) {
