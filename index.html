@@ -3,277 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aruria | Next Gen Discord Bot</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Modern AI Chat Interface</title>
     <style>
-        :root {
-            --primary: #7289DA;
-            --secondary: #5865F2;
-            --accent: #FF73FA;
-            --dark: #0A0A1B;
-            --light: #FFFFFF;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, var(--dark), #16213e);
-            color: var(--light);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Navbar */
-        nav {
+            background: #343541;
+            color: #fff;
+            height: 100vh;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            margin-bottom: 50px;
+            flex-direction: column;
         }
 
-        .logo {
-            font-size: 2em;
-            font-weight: bold;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Header */
-        header {
-            text-align: center;
-            padding: 80px 0;
-            position: relative;
-        }
-
-        .bot-title {
-            font-size: 5em;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            from {
-                text-shadow: 0 0 10px rgba(114, 137, 218, 0.3);
-            }
-            to {
-                text-shadow: 0 0 20px rgba(255, 115, 250, 0.5);
-            }
-        }
-
-        .bot-description {
-            font-size: 1.4em;
-            color: #ccc;
-            margin-bottom: 40px;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-block;
-            padding: 15px 35px;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            color: white;
-            text-decoration: none;
-            border-radius: 30px;
-            font-weight: bold;
-            margin: 10px;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 10px 20px rgba(114, 137, 218, 0.4);
-        }
-
-        /* Features */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin: 50px 0;
-        }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 35px;
-            border-radius: 20px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .feature-card i {
-            font-size: 3em;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
-        }
-
-        /* Premium Section */
-        .premium-section {
-            background: linear-gradient(45deg, rgba(114, 137, 218, 0.1), rgba(255, 115, 250, 0.1));
-            padding: 60px 30px;
-            border-radius: 30px;
-            text-align: center;
-            margin: 80px 0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .premium-title {
-            font-size: 2.5em;
-            color: var(--accent);
-            margin-bottom: 20px;
-        }
-
-        .premium-features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 40px 0;
-        }
-
-        .premium-feature {
+        .chat-container {
+            flex: 1;
             padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
+            overflow-y: auto;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
         }
 
-        /* Stats */
-        .stats {
+        .message {
+            display: flex;
+            margin: 20px 0;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 15px 20px;
+            border-radius: 20px;
+            line-height: 1.5;
+        }
+
+        .user .message-bubble {
+            background: #5C5CFF;
+            border-radius: 20px 20px 0 20px;
+        }
+
+        .bot .message-bubble {
+            background: #444654;
+            border-radius: 20px 20px 20px 0;
+        }
+
+        .input-container {
+            padding: 20px;
+            background: #444654;
             display: flex;
             justify-content: center;
-            gap: 50px;
-            margin: 50px 0;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
         }
 
-        .stat-item {
-            text-align: center;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            min-width: 200px;
+        .input-box {
+            max-width: 1000px;
+            width: 100%;
+            display: flex;
+            gap: 10px;
         }
 
-        .stat-number {
-            font-size: 2.5em;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: bold;
+        textarea {
+            flex: 1;
+            padding: 15px;
+            border-radius: 10px;
+            border: none;
+            background: #40414f;
+            color: white;
+            font-size: 16px;
+            resize: none;
+            height: 50px;
+            outline: none;
         }
 
-        @media (max-width: 768px) {
-            .bot-title {
-                font-size: 3em;
-            }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            background: #5C5CFF;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #4949cc;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 15px 20px;
+            background: #444654;
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: bounce 1s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <nav>
-            <div class="logo">Aruria</div>
-        </nav>
-
-        <header>
-            <h1 class="bot-title">Aruria</h1>
-            <p class="bot-description">Elevate your Discord server with next-generation features</p>
-            <a href="https://discord.com/oauth2/authorize?client_id=1329133886747312159&permissions=8&integration_type=0&scope=bot" class="btn">Add to Discord</a>
-            <a href="https://discord.gg/DmGFzJfZD7" class="btn">Join Support Server</a>
-        </header>
-
-        <div class="features">
-            <div class="feature-card">
-                <i class="fas fa-shield-alt"></i>
-                <h3>Advanced Moderation</h3>
-                <p>Keep your server safe with powerful moderation tools</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-music"></i>
-                <h3>Premium Music</h3>
-                <p>High-quality music streaming with advanced controls</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-gamepad"></i>
-                <h3>Mini Games</h3>
-                <p>Engage your community with fun mini-games</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-chart-line"></i>
-                <h3>Server Stats</h3>
-                <p>Track your server's growth and activity</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-robot"></i>
-                <h3>Auto Moderation</h3>
-                <p>AI-powered automatic content moderation</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-star"></i>
-                <h3>Level System</h3>
-                <p>Reward active members with XP and ranks</p>
+    <div class="chat-container" id="chatContainer">
+        <div class="message bot">
+            <div class="message-bubble">
+                Hello! I'm your AI assistant. How can I help you today?
             </div>
         </div>
-
-        <div class="premium-section">
-            <h2 class="premium-title">Unlock Premium Features</h2>
-            <p>Join our Discord server to access exclusive premium features!</p>
-            <div class="premium-features">
-                <div class="premium-feature">
-                    <i class="fas fa-crown"></i>
-                    <h3>Custom Commands</h3>
-                </div>
-                <div class="premium-feature">
-                    <i class="fas fa-bolt"></i>
-                    <h3>Priority Support</h3>
-                </div>
-                <div class="premium-feature">
-                    <i class="fas fa-gem"></i>
-                    <h3>Exclusive Features</h3>
-                </div>
-            </div>
-            <a href="https://discord.gg/DmGFzJfZD7" class="btn">Join Discord Now</a>
-        </div>
-
-        <div class="stats">
-            <div class="stat-item">
-                <div class="stat-number">0</div>
-                <div class="stat-label">Servers</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">0</div>
-                <div class="stat-label">Users</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">99.9%</div>
-                <div class="stat-label">Uptime</div>
-            </div>
+        <div class="typing-indicator" id="typingIndicator">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
     </div>
+    <div class="input-container">
+        <div class="input-box">
+            <textarea id="userInput" placeholder="Type your message here..." rows="1"></textarea>
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Replace with your Gemini API key
+        const API_KEY = 'AIzaSyC2RUbVzEpaD-MmkmoSSl0Eh2bQlMstevM';
+        const textarea = document.getElementById('userInput');
+        const chatContainer = document.getElementById('chatContainer');
+        const typingIndicator = document.getElementById('typingIndicator');
+
+        textarea.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        async function sendMessage() {
+            const userInput = textarea.value.trim();
+            if (!userInput) return;
+
+            // Add user message
+            addMessage(userInput, 'user');
+            textarea.value = '';
+
+            // Show typing indicator
+            typingIndicator.style.display = 'block';
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: userInput
+                            }]
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                const botResponse = data.candidates[0].content.parts[0].text;
+
+                // Hide typing indicator and add bot response
+                typingIndicator.style.display = 'none';
+                addMessage(botResponse, 'bot');
+
+            } catch (error) {
+                typingIndicator.style.display = 'none';
+                addMessage('Sorry, I encountered an error. Please try again.', 'bot');
+                console.error('Error:', error);
+            }
+        }
+
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.innerHTML = `
+                <div class="message-bubble">
+                    ${text}
+                </div>
+            `;
+            chatContainer.insertBefore(messageDiv, typingIndicator);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    </script>
 </body>
 </html>
