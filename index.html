@@ -3,387 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Chat Interface</title>
+    <title>Coming Soon</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Arial', sans-serif;
         }
 
         body {
-            background: #343541;
-            color: #fff;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .header {
-            background: #444654;
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid #565869;
-        }
-
-        .model-selector {
-            position: relative;
-            display: inline-block;
-        }
-
-        .model-button {
-            background: #5C5CFF;
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .model-button:after {
-            content: '▼';
-            font-size: 12px;
-        }
-
-        .model-dropdown {
-            display: none;
-            position: absolute;
-            background: #2A2B32;
-            min-width: 200px;
-            border-radius: 10px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
-            z-index: 1;
-            margin-top: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .model-dropdown.show {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-
-        .model-option {
-            padding: 15px 20px;
-            cursor: pointer;
-            transition: background 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: white;
-            text-decoration: none;
-        }
-
-        .model-option:hover {
-            background: #404149;
-        }
-
-        .model-option.active {
-            background: #5C5CFF;
-        }
-
-        .chat-container {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            max-width: 1000px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .message {
-            display: flex;
-            margin: 20px 0;
-            animation: fadeIn 0.3s ease-in;
-        }
-
-        .message.user {
-            justify-content: flex-end;
-        }
-
-        .message-bubble {
-            max-width: 70%;
-            padding: 15px 20px;
-            border-radius: 20px;
-            line-height: 1.5;
-            font-size: 15px;
-        }
-
-        .user .message-bubble {
-            background: #5C5CFF;
-            border-radius: 20px 20px 0 20px;
-        }
-
-        .bot .message-bubble {
-            background: #444654;
-            border-radius: 20px 20px 20px 0;
-        }
-
-        .input-container {
-            padding: 20px;
-            background: #444654;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10px;
-            border-top: 1px solid #565869;
+            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
         }
 
-        .input-box {
-            max-width: 1000px;
-            width: 100%;
-            display: flex;
-            gap: 10px;
-        }
-
-        textarea {
-            flex: 1;
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid #565869;
-            background: #40414f;
+        .container {
+            text-align: center;
             color: white;
-            font-size: 16px;
-            resize: none;
-            height: 50px;
-            outline: none;
         }
 
-        button {
-            padding: 10px 25px;
-            border: none;
-            border-radius: 10px;
-            background: #5C5CFF;
-            color: white;
-            cursor: pointer;
-            transition: 0.3s;
+        .title {
+            font-size: 4rem;
+            letter-spacing: 8px;
+            margin-bottom: 20px;
+            position: relative;
+            animation: pulse 2s infinite;
         }
 
-        button:hover {
-            background: #4949cc;
+        .subtitle {
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            opacity: 0.8;
         }
 
-        .typing-indicator {
-            display: none;
-            padding: 15px 20px;
-            background: #444654;
-            border-radius: 20px;
-            margin: 20px 0;
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
-        .typing-indicator span {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background: #fff;
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .circle {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
             border-radius: 50%;
-            margin-right: 5px;
-            animation: bounce 1s infinite;
+            animation: rotate 20s linear infinite;
         }
 
-        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+        .circle:nth-child(1) {
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: scale(1);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .circle:nth-child(2) {
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.5);
         }
 
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .circle:nth-child(3) {
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: scale(2);
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="model-selector">
-            <button class="model-button" onclick="toggleDropdown()" id="currentModel">
-                Select AI Model
-            </button>
-            <div class="model-dropdown" id="modelDropdown">
-                <div class="model-option" onclick="selectModel('chatgpt')">
-                    <div class="model-icon"></div>
-                    ChatGPT
-                </div>
-                <div class="model-option" onclick="selectModel('gemini')">
-                    <div class="model-icon"></div>
-                    Gemini
-                </div>
-                <div class="model-option" onclick="selectModel('llama')">
-                    <div class="model-icon"></div>
-                    Llama 2
-                </div>
-                <div class="model-option" onclick="selectModel('mistral')">
-                    <div class="model-icon"></div>
-                    Mistral
-                </div>
-            </div>
-        </div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="container">
+        <h1 class="title">COMING SOON</h1>
+        <p class="subtitle">Something amazing is in the works</p>
     </div>
-
-    <div class="chat-container" id="chatContainer">
-        <div class="message bot">
-            <div class="message-bubble">
-                Hello! Please select an AI model to start chatting.
-            </div>
-        </div>
-        <div class="typing-indicator" id="typingIndicator">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-    </div>
-
-    <div class="input-container">
-        <div class="input-box">
-            <textarea id="userInput" placeholder="Type your message here..." rows="1"></textarea>
-            <button onclick="sendMessage()">Send</button>
-        </div>
-    </div>
-
-    <script>
-        let currentModel = null;
-        const textarea = document.getElementById('userInput');
-        const chatContainer = document.getElementById('chatContainer');
-        const typingIndicator = document.getElementById('typingIndicator');
-
-      const API_ENDPOINTS = {
-    'chatgpt': 'https://chatgpt-api.shn.hk/v1/',
-    'gemini': 'https://modelapi.ai21.com/complete',
-    'llama': 'https://api.nlpcloud.io/v1/gpu/finetuned-llama-2-70b/generation',
-    'mistral': 'https://api.textcortex.com/v1/texts/completions'
-};
-
-async function generateResponse(input) {
-    const endpoint = API_ENDPOINTS[currentModel];
-    
-    const payload = {
-        prompt: input,
-        max_tokens: 2048,
-        temperature: 0.7,
-        stream: false
-    };
-
-    const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Origin': 'https://chatgpt.ai'
-        },
-        body: JSON.stringify(payload)
-    });
-
-    const data = await response.json();
-
-
-        async function generateResponse(input) {
-            const endpoint = API_ENDPOINTS[currentModel];
-            
-            const payload = {
-                messages: [{
-                    role: "user",
-                    content: input
-                }],
-                model: "gpt-3.5-turbo",
-                temperature: 0.7,
-                max_tokens: 2048
-            };
-
-            try {
-                const response = await fetch(endpoint, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) {
-                    throw new Error('API request failed');
-                }
-
-                const data = await response.json();
-                return data.choices[0].message.content || data.choices[0].text || data.generated_text || "I apologize, but I couldn't generate a proper response.";
-            } catch (error) {
-                console.error('Error:', error);
-                throw error;
-            }
-        }
-
-        function toggleDropdown() {
-            document.getElementById('modelDropdown').classList.toggle('show');
-        }
-
-        function selectModel(model) {
-            currentModel = model;
-            document.getElementById('currentModel').textContent = model.charAt(0).toUpperCase() + model.slice(1);
-            document.getElementById('modelDropdown').classList.remove('show');
-            addMessage(`Switched to ${model.charAt(0).toUpperCase() + model.slice(1)} model`, 'bot');
-        }
-
-        async function sendMessage() {
-            const userInput = textarea.value.trim();
-            if (!userInput) return;
-            if (!currentModel) {
-                addMessage('Please select an AI model first!', 'bot');
-                return;
-            }
-
-            addMessage(userInput, 'user');
-            textarea.value = '';
-            typingIndicator.style.display = 'block';
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-
-            try {
-                const response = await generateResponse(userInput);
-                typingIndicator.style.display = 'none';
-                addMessage(response, 'bot');
-            } catch (error) {
-                typingIndicator.style.display = 'none';
-                addMessage('This model is temporarily unavailable. Please try another model.', 'bot');
-            }
-        }
-
-        function addMessage(text, sender) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${sender}`;
-            messageDiv.innerHTML = `
-                <div class="message-bubble">
-                    ${text}
-                </div>
-            `;
-            chatContainer.insertBefore(messageDiv, typingIndicator);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-
-        textarea.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
-
-        window.onclick = function(event) {
-            if (!event.target.matches('.model-button')) {
-                const dropdowns = document.getElementsByClassName('model-dropdown');
-                Array.from(dropdowns).forEach(dropdown => {
-                    if (dropdown.classList.contains('show')) {
-                        dropdown.classList.remove('show');
-                    }
-                });
-            }
-        }
-    </script>
 </body>
 </html>
