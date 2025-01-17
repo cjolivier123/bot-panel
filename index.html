@@ -4,7 +4,239 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multi-Model AI Chat Interface</title>
-    <!-- Previous CSS styles remain exactly the same -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #343541;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: #444654;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #565869;
+        }
+
+        .model-selector {
+            position: relative;
+            display: inline-block;
+        }
+
+        .model-button {
+            background: #5C5CFF;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .model-button:after {
+            content: '▼';
+            font-size: 12px;
+        }
+
+        .model-dropdown {
+            display: none;
+            position: absolute;
+            background: #2A2B32;
+            min-width: 200px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            z-index: 1;
+            margin-top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .model-dropdown.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        .model-option {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .model-option:hover {
+            background: #404149;
+        }
+
+        .model-option.active {
+            background: #5C5CFF;
+        }
+
+        .model-icon {
+            width: 20px;
+            height: 20px;
+            background: #5C5CFF;
+            border-radius: 50%;
+        }
+
+        .chat-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .message {
+            display: flex;
+            margin: 20px 0;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 15px 20px;
+            border-radius: 20px;
+            line-height: 1.5;
+            font-size: 15px;
+        }
+
+        .user .message-bubble {
+            background: #5C5CFF;
+            border-radius: 20px 20px 0 20px;
+        }
+
+        .bot .message-bubble {
+            background: #444654;
+            border-radius: 20px 20px 20px 0;
+        }
+
+        .input-container {
+            padding: 20px;
+            background: #444654;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            border-top: 1px solid #565869;
+        }
+
+        .input-box {
+            max-width: 1000px;
+            width: 100%;
+            display: flex;
+            gap: 10px;
+            position: relative;
+        }
+
+        textarea {
+            flex: 1;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #565869;
+            background: #40414f;
+            color: white;
+            font-size: 16px;
+            resize: none;
+            height: 50px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            border-color: #5C5CFF;
+        }
+
+        button {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 10px;
+            background: #5C5CFF;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        button:hover {
+            background: #4949cc;
+            transform: translateY(-1px);
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 15px 20px;
+            background: #444654;
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: bounce 1s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #2A2B32;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #565869;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #676980;
+        }
+    </style>
 </head>
 <body>
     <div class="header">
@@ -13,23 +245,49 @@
                 Select AI Model
             </button>
             <div class="model-dropdown" id="modelDropdown">
-                <div class="model-option" onclick="selectModel('chat')">
+                <div class="model-option" onclick="selectModel('gpt3')">
                     <div class="model-icon"></div>
-                    ChatAI
+                    GPT-3.5
                 </div>
-                <div class="model-option" onclick="selectModel('assistant')">
+                <div class="model-option" onclick="selectModel('palm')">
                     <div class="model-icon"></div>
-                    Assistant
+                    PaLM
                 </div>
-                <div class="model-option" onclick="selectModel('completion')">
+                <div class="model-option" onclick="selectModel('llama')">
                     <div class="model-icon"></div>
-                    Completion
+                    Llama 2
+                </div>
+                <div class="model-option" onclick="selectModel('claude')">
+                    <div class="model-icon"></div>
+                    Claude
+                </div>
+                <div class="model-option" onclick="selectModel('falcon')">
+                    <div class="model-icon"></div>
+                    Falcon
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Previous HTML structure remains the same -->
+    <div class="chat-container" id="chatContainer">
+        <div class="message bot">
+            <div class="message-bubble">
+                Hello! Please select an AI model to start chatting.
+            </div>
+        </div>
+        <div class="typing-indicator" id="typingIndicator">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <div class="input-container">
+        <div class="input-box">
+            <textarea id="userInput" placeholder="Type your message here..." rows="1"></textarea>
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
 
     <script>
         let currentModel = null;
@@ -37,66 +295,77 @@
         const chatContainer = document.getElementById('chatContainer');
         const typingIndicator = document.getElementById('typingIndicator');
 
-        // Using reliable free endpoints
         const API_ENDPOINTS = {
-            'chat': 'https://free.churchless.tech/v1/chat/completions',
-            'assistant': 'https://api.openai-proxy.com/v1/chat/completions',
-            'completion': 'https://api.deepinfra.com/v1/inference/chat'
+            'gpt3': [
+                'https://free.churchless.tech/v1/chat/completions',
+                'https://api.free-ai.chat/v1/chat/completions',
+                'https://api.openai-proxy.com/v1/chat/completions'
+            ],
+            'palm': [
+                'https://palm-api-proxy.onrender.com/v1/chat/completions',
+                'https://palm-proxy.free-ai.dev/v1/chat/completions'
+            ],
+            'llama': [
+                'https://api.llama-api.com/chat/completions',
+                'https://llama.free-ai.dev/v1/chat/completions'
+            ],
+            'claude': [
+                'https://claude-api.free-ai.dev/v1/chat/completions',
+                'https://claude-proxy.onrender.com/v1/chat/completions'
+            ],
+            'falcon': [
+                'https://falcon-api.free-ai.dev/v1/chat/completions',
+                'https://api.deepinfra.com/v1/inference/falcon-7b-instruct'
+            ]
         };
 
         async function generateResponse(input) {
-            const endpoint = API_ENDPOINTS[currentModel];
-            
-            const payload = {
-                messages: [{
-                    role: "user",
-                    content: input
-                }],
-                model: "gpt-3.5-turbo",
-                temperature: 0.7,
-                max_tokens: 150
-            };
+            const endpoints = API_ENDPOINTS[currentModel];
+            let lastError = null;
 
-            try {
-                const response = await fetch(endpoint, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload)
-                });
+            for (const endpoint of endpoints) {
+                try {
+                    const payload = {
+                        messages: [{
+                            role: "user",
+                            content: input
+                        }],
+                        model: currentModel,
+                        temperature: 0.7,
+                        max_tokens: 150
+                    };
 
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    const response = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const data = await response.json();
+                    
+                    if (data.choices && data.choices[0]) {
+                        return data.choices[0].message?.content || data.choices[0].text;
+                    } else if (data.response) {
+                        return data.response;
+                    } else if (data.generated_text) {
+                        return data.generated_text;
+                    }
+                    
+                    return data.output || data.text || "I couldn't generate a proper response.";
+
+                } catch (error) {
+                    lastError = error;
+                    continue;
                 }
-
-                const data = await response.json();
-                return data.choices[0].message.content;
-            } catch (error) {
-                // Fallback to backup API if primary fails
-                const backupEndpoint = 'https://api.free-ai.chat/v1/chat/completions';
-                const backupResponse = await fetch(backupEndpoint, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload)
-                });
-                
-                const backupData = await backupResponse.json();
-                return backupData.choices[0].message.content;
             }
-        }
 
-        function toggleDropdown() {
-            document.getElementById('modelDropdown').classList.toggle('show');
-        }
-
-        function selectModel(model) {
-            currentModel = model;
-            document.getElementById('currentModel').textContent = model.charAt(0).toUpperCase() + model.slice(1);
-            document.getElementById('modelDropdown').classList.remove('show');
-            addMessage(`Now using ${model.charAt(0).toUpperCase() + model.slice(1)} model`, 'bot');
+            throw lastError;
         }
 
         async function sendMessage() {
@@ -118,22 +387,21 @@
                 addMessage(response, 'bot');
             } catch (error) {
                 typingIndicator.style.display = 'none';
-                addMessage('Switching to backup model...', 'bot');
-                try {
-                    const backupResponse = await generateResponse(userInput);
-                    addMessage(backupResponse, 'bot');
-                } catch (backupError) {
-                    addMessage('Please try again in a moment.', 'bot');
-                }
+                addMessage('This model is currently busy. Please try another model or try again in a moment.', 'bot');
+                console.error('Error:', error);
             }
         }
 
-        textarea.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
+        function toggleDropdown() {
+            document.getElementById('modelDropdown').classList.toggle('show');
+        }
+
+        function selectModel(model) {
+            currentModel = model;
+            document.getElementById('currentModel').textContent = model.toUpperCase();
+            document.getElementById('modelDropdown').classList.remove('show');
+            addMessage(`Now using ${model.toUpperCase()} model`, 'bot');
+        }
 
         function addMessage(text, sender) {
             const messageDiv = document.createElement('div');
@@ -147,7 +415,13 @@
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        // Close dropdown when clicking outside
+        textarea.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
         window.onclick = function(event) {
             if (!event.target.matches('.model-button')) {
                 const dropdowns = document.getElementsByClassName('model-dropdown');
