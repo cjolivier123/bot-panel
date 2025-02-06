@@ -1,114 +1,277 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coming Soon</title>
+    <base href="/">
+    <link rel="icon" href="https://storage.googleapis.com/lazy-icons/not-found-placeholder.webp" type="image/x-icon">
+    <title>HTML File Hosting</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+      /* Tailwind CSS Base */
+      @import url("https://cdn.jsdelivr.net/npm/tailwindcss@3.4.3/base.min.css");
+      @import url("https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css");
+      @import url("https://fonts.googleapis.com/css2?family=Geist+Sans:wght@300;400;500;600&display=swap");
+      @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+      /* Custom styles */
+      :root {
+        --bg-color: #1a202c;
+        --text-color: #f7fafc;
+        --header-bg: #2d3748;
+        --nav-link-bg: #4a5568;
+        --nav-link-hover: #718096;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        font-family: 'Geist Sans', sans-serif;
+      }
+
+      .app-header {
+        background-color: var(--header-bg);
+        color: var(--text-color);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        padding: 0.5rem 0;
+      }
+
+      .app-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 1.25rem;
+        margin: 0 auto;
+        max-width: 1280px;
+      }
+
+      .app-logo {
+        display: flex;
+        align-items: center;
+      }
+
+      .app-logo-image {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 9999px;
+        margin-right: 0.75rem;
+      }
+
+      .app-title {
+        font-size: 1.25rem;
+        font-weight: 500;
+        letter-spacing: -0.025em;
+      }
+
+      .desktop-nav ul {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .desktop-nav-link {
+        font-family: 'Geist Sans', sans-serif;
+        color: var(--text-color);
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.375rem;
+        transition: background-color 0.3s;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+      }
+
+      .desktop-nav-link:hover {
+        background-color: var(--nav-link-hover);
+      }
+
+      .mobile-menu-button {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.5rem;
+        color: #a0aec0;
+        border-radius: 0.375rem;
+        background: transparent;
+        border: none;
+      }
+
+      .mobile-menu-button:hover {
+        background-color: #4a5568;
+      }
+
+      .mobile-menu-button:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px #4a5568;
+      }
+
+      .mobile-menu {
+        display: none;
+        position: absolute;
+        top: 4rem;
+        left: 0;
+        width: 100%;
+        background-color: var(--header-bg);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        z-index: 50;
+      }
+
+      .mobile-menu.show {
+        display: block;
+      }
+
+      .mobile-menu ul {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1rem;
+      }
+
+      .mobile-menu-link {
+        display: block;
+        padding: 0.5rem 1rem;
+        color: #a0aec0;
+        border-bottom: 1px solid #4a5568;
+        text-decoration: none;
+        font-family: 'Geist Sans', sans-serif;
+        font-weight: 300;
+      }
+
+      .mobile-menu-link:hover {
+        background-color: #4a5568;
+      }
+
+      .main-content {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 1rem;
+        margin-top: 2rem;
+        min-height: calc(100vh - 4rem);
+      }
+
+      @media (min-width: 768px) {
+        .md\:hidden {
+          display: none;
         }
 
-        body {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+        .md\:block {
+          display: block;
         }
-
-        .container {
-            text-align: center;
-            color: white;
-        }
-
-        .title {
-            font-size: 4rem;
-            letter-spacing: 8px;
-            margin-bottom: 20px;
-            position: relative;
-            animation: pulse 2s infinite;
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            letter-spacing: 3px;
-            opacity: 0.8;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.05);
-                opacity: 0.8;
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        @keyframes gradientBG {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        .circle {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: rotate 20s linear infinite;
-        }
-
-        .circle:nth-child(1) {
-            border-color: rgba(255, 255, 255, 0.1);
-            transform: scale(1);
-        }
-
-        .circle:nth-child(2) {
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: scale(1.5);
-        }
-
-        .circle:nth-child(3) {
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: scale(2);
-        }
-
-        @keyframes rotate {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
+      }
     </style>
-</head>
-<body>
-    <div class="circle"></div>
-    <div class="circle"></div>
-    <div class="circle"></div>
-    <div class="container">
-        <h1 class="title">COMING SOON</h1>
-        <p class="subtitle">Something amazing is in the works</p>
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="app-container">
+        <div class="app-logo">
+          <img src="https://storage.googleapis.com/lazy-icons/not-found-placeholder.webp" class="app-logo-image">
+          <span class="app-title">HTML File Hosting</span>
+        </div>
+        <div class="hidden md:block">
+          <nav class="desktop-nav">
+            <ul>
+              <li><a href="/" class="desktop-nav-link"><span class="material-icons">home</span></a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="md:hidden">
+          <div class="mobile-menu-button">
+            <button id="mobile-menu-button" class="mobile-menu-button" aria-controls="mobile-menu" aria-expanded="false">
+              <span class="sr-only">Open main menu</span>
+              <span class="material-icons">menu</span>
+            </button>
+          </div>
+          <div id="mobile-menu" class="mobile-menu">
+            <ul>
+              <li><a href="/" class="mobile-menu-link">Home</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="main-content">
+      <div class="text-center py-10">
+        <div class="max-w-md mx-auto">
+          <form id="html-upload-form" class="bg-gray-800 p-6 rounded-lg shadow-md">
+            <div class="mb-4">
+              <label for="html-file" class="block text-sm font-medium text-gray-300 mb-2">Upload HTML File</label>
+              <input type="file" id="html-file" name="html-file" accept=".html" 
+                     class="block w-full text-sm text-gray-300 
+                            file:mr-4 file:py-2 file:px-4
+                            file:rounded-full file:border-0
+                            file:text-sm file:font-semibold
+                            file:bg-gray-700 file:text-gray-300
+                            hover:file:bg-gray-600
+                            cursor-pointer" required>
+            </div>
+            <button type="submit" 
+                    class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg 
+                           hover:bg-blue-700 transition duration-300 
+                           focus:outline-none focus:ring-2 focus:ring-blue-500">
+              Upload
+            </button>
+          </form>
+          <div id="upload-result" class="mt-4 text-center"></div>
+        </div>
+      </div>
     </div>
-</body>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+          mobileMenu.classList.toggle('show');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (event) => {
+          if (!mobileMenu.contains(event.target) && !mobileMenuButton.contains(event.target)) {
+            mobileMenu.classList.add('hidden');
+          }
+        });
+      });
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const uploadForm = document.getElementById('html-upload-form');
+        const uploadResult = document.getElementById('upload-result');
+
+        uploadForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const fileInput = document.getElementById('html-file');
+          const file = fileInput.files[0];
+
+          if (!file || file.type !== 'text/html') {
+            uploadResult.innerHTML = '<p class="text-red-500">Please upload a valid HTML file.</p>';
+            return;
+          }
+
+          const formData = new FormData();
+          formData.append('html_file', file);
+
+          try {
+            uploadResult.innerHTML = '<p class="text-yellow-500">Uploading...</p>';
+            const response = await fetch('/upload', {
+              method: 'POST',
+              body: formData
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+              uploadResult.innerHTML = `
+                <p class="text-green-500">File uploaded successfully!</p>
+                <a href="${result.url}" target="_blank" class="text-blue-400 hover:underline">
+                  View Your HTML Page
+                </a>
+              `;
+            } else {
+              uploadResult.innerHTML = `<p class="text-red-500">${result.error}</p>`;
+            }
+          } catch (error) {
+            uploadResult.innerHTML = '<p class="text-red-500">An error occurred during upload.</p>';
+            console.error('Upload error:', error);
+          }
+        });
+      });
+    </script>
+  </body>
 </html>
